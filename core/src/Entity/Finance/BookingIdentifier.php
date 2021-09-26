@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Finance;
 
-use App\Repository\BookingIdentifierRepository;
+use App\Repository\Finance\BookingIdentifierRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=BookingIdentifierRepository::class)
@@ -30,7 +29,6 @@ class BookingIdentifier
      */
     private Collection $repeatingTransactions;
 
-    #[Pure]
     public function __construct()
     {
         $this->repeatingTransactions = new ArrayCollection();

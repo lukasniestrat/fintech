@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Finance;
 
-use App\Entity\BankAccount;
+use App\Entity\Finance\BookingIdentifier;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method BankAccount|null find($id, $lockMode = null, $lockVersion = null)
- * @method BankAccount|null findOneBy(array $criteria, array $orderBy = null)
- * @method BankAccount[]    findAll()
- * @method BankAccount[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method BookingIdentifier|null find($id, $lockMode = null, $lockVersion = null)
+ * @method BookingIdentifier|null findOneBy(array $criteria, array $orderBy = null)
+ * @method BookingIdentifier[]    findAll()
+ * @method BookingIdentifier[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class BankAccountRepository extends ServiceEntityRepository
+class BookingIdentifierRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, BankAccount::class);
+        parent::__construct($registry, BookingIdentifier::class);
     }
 
     // /**
-    //  * @return BankAccount[] Returns an array of BankAccount objects
+    //  * @return BookingIdentifier[] Returns an array of BookingIdentifier objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class BankAccountRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?BankAccount
+    public function findOneBySomeField($value): ?BookingIdentifier
     {
         return $this->createQueryBuilder('b')
             ->andWhere('b.exampleField = :val')

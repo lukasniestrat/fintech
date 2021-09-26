@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Finance;
 
-use App\Repository\RepeatingTransactionRepository;
+use App\Repository\Finance\RepeatingTransactionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

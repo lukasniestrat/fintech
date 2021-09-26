@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Finance;
 
-use App\Repository\TransactionRepository;
+use App\Repository\Finance\TransactionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
@@ -51,7 +50,6 @@ class Transaction
      */
     private Collection $category;
 
-    #[Pure]
     public function __construct()
     {
         $this->category = new ArrayCollection();

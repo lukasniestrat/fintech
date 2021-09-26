@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventListener;
+namespace App\EventListener\Common;
 
 use App\Exception\Common\FinException;
 use Psr\Log\LoggerInterface;

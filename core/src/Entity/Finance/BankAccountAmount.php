@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Finance;
 
-use App\Repository\BankAccountAmountRepository;
+use App\Repository\Finance\BankAccountAmountRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

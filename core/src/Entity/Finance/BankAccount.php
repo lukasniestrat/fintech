@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Finance;
 
-use App\Repository\BankAccountRepository;
+use App\Repository\Finance\BankAccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=BankAccountRepository::class)
@@ -45,7 +44,6 @@ class BankAccount
      */
     private Collection $transactions;
 
-    #[Pure]
     public function __construct()
     {
         $this->categories = new ArrayCollection();
