@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Entity\Finance;
 
 use App\Repository\Finance\RepeatingTransactionRepository;
@@ -48,6 +48,11 @@ class RepeatingTransaction
      * @ORM\JoinColumn(nullable=false)
      */
     private Category $category;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private string $subject;
 
     public function getId(): ?int
     {
@@ -122,6 +127,18 @@ class RepeatingTransaction
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getSubject(): ?string
+    {
+        return $this->subject;
+    }
+
+    public function setSubject(string $subject): self
+    {
+        $this->subject = $subject;
 
         return $this;
     }

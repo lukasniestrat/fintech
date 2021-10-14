@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Entity\Finance;
 
 use App\Repository\Finance\CategoryRepository;
@@ -40,7 +40,7 @@ class Category
     private Collection $repeatingTransactions;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Transaction::class, mappedBy="category")
+     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="category")
      */
     private Collection $transactions;
 
@@ -49,6 +49,15 @@ class Category
         $this->bankAccount = new ArrayCollection();
         $this->repeatingTransactions = new ArrayCollection();
         $this->transactions = new ArrayCollection();
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'tags' => $this->getTags(),
+        ];
     }
 
     public function getId(): ?int
@@ -70,7 +79,7 @@ class Category
 
     public function getTags(): ?string
     {
-        return $this->tags;
+        return $this->tags ?? null;
     }
 
     public function setTags(string $tags): self
@@ -146,7 +155,7 @@ class Category
     {
         if (!$this->transactions->contains($transaction)) {
             $this->transactions[] = $transaction;
-            $transaction->addCategory($this);
+            $transaction->setCategory($this);
         }
 
         return $this;
@@ -155,7 +164,10 @@ class Category
     public function removeTransaction(Transaction $transaction): self
     {
         if ($this->transactions->removeElement($transaction)) {
-            $transaction->removeCategory($this);
+            // set the owning side to null (unless already changed)
+            if ($transaction->getCategory() === $this) {
+                $transaction->setCategory(null);
+            }
         }
 
         return $this;

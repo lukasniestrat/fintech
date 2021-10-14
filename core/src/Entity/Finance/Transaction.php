@@ -1,10 +1,9 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Entity\Finance;
 
+use App\Model\Common\FinConstants;
 use App\Repository\Finance\TransactionRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -32,7 +31,7 @@ class Transaction
     /**
      * @ORM\Column(type="date")
      */
-    private \Date $bookingDate;
+    private \DateTime $bookingDate;
 
     /**
      * @ORM\Column(type="string", length=22)
@@ -46,13 +45,30 @@ class Transaction
     private BankAccount $bankAccount;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="transactions")
+     * @ORM\Column(type="string", length=255)
      */
-    private Collection $category;
+    private string $subject;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="transactions")
+     */
+    private Category $category;
 
     public function __construct()
+    {}
+
+    public function toArray(): array
     {
-        $this->category = new ArrayCollection();
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'subject' => $this->getSubject(),
+            'amount' =>  $this->getSubject(),
+            'bookingDate' => $this->getBookingDate()->format(FinConstants::DATE_FORMAT_DATE_ONLY),
+            'iban' => $this->getIban(),
+            'category' => $this->getCategory()->toArray(),
+            'bankAccount' => $this->getBankAccount()->toArray(),
+        ];
     }
 
     public function getId(): ?int
@@ -72,12 +88,12 @@ class Transaction
         return $this;
     }
 
-    public function getAmount(): ?string
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
 
-    public function setAmount(string $amount): self
+    public function setAmount(float $amount): self
     {
         $this->amount = $amount;
 
@@ -120,26 +136,26 @@ class Transaction
         return $this;
     }
 
-    /**
-     * @return Collection|Category[]
-     */
-    public function getCategory(): Collection
+    public function getSubject(): ?string
     {
-        return $this->category;
+        return $this->subject;
     }
 
-    public function addCategory(Category $category): self
+    public function setSubject(string $subject): self
     {
-        if (!$this->category->contains($category)) {
-            $this->category[] = $category;
-        }
+        $this->subject = $subject;
 
         return $this;
     }
 
-    public function removeCategory(Category $category): self
+    public function getCategory(): ?Category
     {
-        $this->category->removeElement($category);
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
 
         return $this;
     }

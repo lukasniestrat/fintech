@@ -102,6 +102,8 @@
       <excludeFolder url="file://$MODULE_DIR$/core/vendor/monolog/monolog" />
       <excludeFolder url="file://$MODULE_DIR$/core/vendor/symfony/monolog-bridge" />
       <excludeFolder url="file://$MODULE_DIR$/core/vendor/symfony/monolog-bundle" />
+      <excludeFolder url="file://$MODULE_DIR$/core/vendor/symfony/mime" />
+      <excludeFolder url="file://$MODULE_DIR$/core/vendor/symfony/polyfill-intl-idn" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

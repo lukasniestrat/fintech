@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 namespace App\Entity\Finance;
 
 use App\Repository\Finance\BankAccountRepository;
@@ -48,6 +48,16 @@ class BankAccount
     {
         $this->categories = new ArrayCollection();
         $this->transactions = new ArrayCollection();
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'iban' => $this->getIban(),
+            'isSavingAccount' => $this->getIsSavingAccount(),
+        ];
     }
 
     public function getId(): ?int
