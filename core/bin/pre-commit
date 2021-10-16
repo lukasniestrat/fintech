@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+FIN_ROOT="$(git rev-parse --show-toplevel)"
+CORE_ROOT="$FIN_ROOT/core"
+PHP_FILES="$(git diff --name-only --cached --diff-filter=ACMR HEAD ${CORE_ROOT} | grep -E '\.(php)$' | awk -v dir="$FIN_ROOT" '$0=dir"/"$0')"
+
+if [[ -n "$PHP_FILES" ]]; then
+  echo "1. Fix Code-Style"
+  ${CORE_ROOT}/bin/php-cs-fixer.phar fix --config=${CORE_ROOT}/.php-cs-fixer.dist.php --quiet ${PHP_FILES}
+fi
+
+git add ${PHP_FILES}
