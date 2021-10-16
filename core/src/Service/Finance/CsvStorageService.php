@@ -1,11 +1,11 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace App\Service\Finance;
 
 use App\Exception\Common\UploadFileException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use DateTime;
 use Exception;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CsvStorageService
 {
@@ -20,7 +20,8 @@ class CsvStorageService
 
         try {
             $uploadedFile->move($path, $fileName);
-        } catch (FileException $e) { }
+        } catch (FileException $e) {
+        }
 
         return $path . '/' . $fileName;
     }

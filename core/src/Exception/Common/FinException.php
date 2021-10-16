@@ -1,9 +1,7 @@
 <?php
-
 namespace App\Exception\Common;
 
 use Exception;
-use JetBrains\PhpStorm\Pure;
 use Symfony\Component\HttpFoundation\Response;
 
 class FinException extends Exception

@@ -1,8 +1,5 @@
 <?php
-
 namespace App\Exception\Common;
-
-use JetBrains\PhpStorm\Pure;
 
 class ApiRequestException extends FinException
 {

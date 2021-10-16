@@ -1,9 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace App\Tests\Mocks\Finance\Repositories;
 
-use App\Repository\Finance\BankAccountRepository;
 use App\Entity\Finance\BankAccount;
+use App\Repository\Finance\BankAccountRepository;
 
 class BankAccountRepositoryMock extends BankAccountRepository
 {

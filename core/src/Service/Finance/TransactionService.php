@@ -1,15 +1,15 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace App\Service\Finance;
 
 use App\Entity\Finance\Category;
 use App\Entity\Finance\Transaction;
+use App\Exception\Common\UploadFileException;
 use App\Exception\Finance\BankAccountException;
 use App\Model\Common\FinConstants;
 use App\Repository\Finance\TransactionRepository;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Exception\Common\UploadFileException;
 use DateTime;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class TransactionService
 {
@@ -36,14 +36,14 @@ class TransactionService
         $file = fopen($fileLink, 'r');
         $uncategorizedTransactions = [];
 
-        fgetcsv($file, 10000, ";");
-        while (($transactionCsv = fgetcsv($file, 10000, ";")) !== false) {
+        fgetcsv($file, 10000, ';');
+        while (($transactionCsv = fgetcsv($file, 10000, ';')) !== false) {
             $transaction = new Transaction();
             $transaction
                 ->setBankAccount($bankAccount)
                 ->setName($transactionCsv[11])
                 ->setSubject($transactionCsv[4])
-                ->setAmount(floatval(str_replace(',', '.',$transactionCsv[14])))
+                ->setAmount(floatval(str_replace(',', '.', $transactionCsv[14])))
                 ->setBookingDate(new DateTime($transactionCsv[1]))
                 ->setIban($transactionCsv[12]);
 

@@ -1,16 +1,16 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace App\Controller\Finance;
 
 use App\Controller\Common\AbstractFinController;
 use App\Exception\Common\UploadFileException;
+use App\Exception\Finance\BankAccountException;
 use App\Service\Finance\Serializer\TransactionSerializer;
 use App\Service\Finance\TransactionService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Exception\Finance\BankAccountException;
 
 class TransactionController extends AbstractFinController
 {

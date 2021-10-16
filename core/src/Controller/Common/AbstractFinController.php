@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller\Common;
 
 use App\Exception\Common\ApiRequestException;

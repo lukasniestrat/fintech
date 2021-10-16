@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace App\Entity\Finance;
 
 use App\Model\Common\FinConstants;
@@ -55,7 +55,8 @@ class Transaction
     private Category $category;
 
     public function __construct()
-    {}
+    {
+    }
 
     public function toArray(): array
     {
@@ -63,7 +64,7 @@ class Transaction
             'id' => $this->getId(),
             'name' => $this->getName(),
             'subject' => $this->getSubject(),
-            'amount' =>  $this->getSubject(),
+            'amount' => $this->getSubject(),
             'bookingDate' => $this->getBookingDate()->format(FinConstants::DATE_FORMAT_DATE_ONLY),
             'iban' => $this->getIban(),
             'category' => $this->getCategory()->toArray(),

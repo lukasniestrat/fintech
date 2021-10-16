@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Exception\Common;
 
 class UploadFileException extends FinException
