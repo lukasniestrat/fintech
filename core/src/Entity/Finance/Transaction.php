@@ -4,6 +4,7 @@ namespace App\Entity\Finance;
 
 use App\Model\Common\FinConstants;
 use App\Repository\Finance\TransactionRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,7 +32,7 @@ class Transaction
     /**
      * @ORM\Column(type="date")
      */
-    private \DateTime $bookingDate;
+    private DateTimeInterface $bookingDate;
 
     /**
      * @ORM\Column(type="string", length=22)
@@ -101,12 +102,12 @@ class Transaction
         return $this;
     }
 
-    public function getBookingDate(): ?\DateTimeInterface
+    public function getBookingDate(): ?DateTimeInterface
     {
         return $this->bookingDate;
     }
 
-    public function setBookingDate(\DateTimeInterface $bookingDate): self
+    public function setBookingDate(DateTimeInterface $bookingDate): self
     {
         $this->bookingDate = $bookingDate;
 

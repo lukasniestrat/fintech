@@ -19,7 +19,7 @@ class BankAccountRepositoryMock extends BankAccountRepository
 
     public function findBankAccountById(int $bankAccountId): ?BankAccount
     {
-        self::$bankAccountId++;
+        self::$countFindBankAccountById++;
 
         return self::$bankAccount;
     }

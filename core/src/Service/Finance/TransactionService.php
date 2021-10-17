@@ -36,31 +36,35 @@ class TransactionService
         $file = fopen($fileLink, 'r');
         $uncategorizedTransactions = [];
 
-        fgetcsv($file, 10000, ';');
-        while (($transactionCsv = fgetcsv($file, 10000, ';')) !== false) {
-            $transaction = new Transaction();
-            $transaction
-                ->setBankAccount($bankAccount)
-                ->setName($transactionCsv[11])
-                ->setSubject($transactionCsv[4])
-                ->setAmount(floatval(str_replace(',', '.', $transactionCsv[14])))
-                ->setBookingDate(new DateTime($transactionCsv[1]))
-                ->setIban($transactionCsv[12]);
+        if ($file) {
+            fgetcsv($file, 10000, ';');
+            while (($transactionCsv = fgetcsv($file, 10000, ';')) !== false) {
+                $transaction = new Transaction();
+                $transaction
+                    ->setBankAccount($bankAccount)
+                    ->setName($transactionCsv[11])
+                    ->setSubject($transactionCsv[4])
+                    ->setAmount(floatval(str_replace(',', '.', $transactionCsv[14])))
+                    ->setBookingDate(new DateTime($transactionCsv[1]))
+                    ->setIban($transactionCsv[12]);
 
-            if (false === $this->checkIfTransactionExists($transaction)) {
-                $category = $this->getCategoryForTransaction($transaction);
-                $transaction->setCategory($category);
+                if (false === $this->checkIfTransactionExists($transaction)) {
+                    $category = $this->getCategoryForTransaction($transaction);
+                    $transaction->setCategory($category);
 
-                // can't sort any category 1 is default
-                if (1 === $category->getId()) {
-                    $uncategorizedTransactions[] = $transaction;
+                    // can't sort any category 1 is default
+                    if (1 === $category->getId()) {
+                        $uncategorizedTransactions[] = $transaction;
+                    }
+
+                    $this->transactionRepository->storeTransaction($transaction);
                 }
-
-                $this->transactionRepository->storeTransaction($transaction);
             }
-        }
 
-        return $uncategorizedTransactions;
+            return $uncategorizedTransactions;
+        } else {
+            die('Unable to open file');
+        }
     }
 
     public function findTransactionsBySubject(string $subject): ?array

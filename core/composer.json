@@ -23,6 +23,7 @@
         "symfony/yaml": "5.3.*"
     },
     "require-dev": {
+        "phpstan/phpstan": "^0.12.99",
         "phpunit/phpunit": "^9.5",
         "symfony/browser-kit": "5.3.*",
         "symfony/css-selector": "5.3.*",
@@ -57,11 +58,12 @@
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-sRepeatingTransactioncripts"
         ],
         "post-update-cmd": [
             "@auto-scripts"
-        ]
+        ],
+        "phpstan": ["vendor/bin/phpstan.phar analyse -c phpstan.neon.dist"]
     },
     "conflict": {
         "symfony/symfony": "*"

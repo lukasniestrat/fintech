@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace App\Entity\Finance;
 
 use App\Repository\Finance\RepeatingTransactionRepository;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -30,12 +31,12 @@ class RepeatingTransaction
     /**
      * @ORM\Column(type="date")
      */
-    private \Date $lastBookingDate;
+    private DateTimeInterface $lastBookingDate;
 
     /**
      * @ORM\Column(type="date")
      */
-    private \Date $nextBookingDate;
+    private DateTimeInterface $nextBookingDate;
 
     /**
      * @ORM\ManyToOne(targetEntity=BookingIdentifier::class, inversedBy="repeatingTransactions")
@@ -71,12 +72,12 @@ class RepeatingTransaction
         return $this;
     }
 
-    public function getAmount(): ?string
+    public function getAmount(): ?float
     {
         return $this->amount;
     }
 
-    public function setAmount(string $amount): self
+    public function setAmount(float $amount): self
     {
         $this->amount = $amount;
 

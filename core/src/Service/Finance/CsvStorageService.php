@@ -5,6 +5,7 @@ namespace App\Service\Finance;
 use App\Exception\Common\UploadFileException;
 use DateTime;
 use Exception;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CsvStorageService

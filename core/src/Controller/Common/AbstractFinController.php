@@ -22,7 +22,10 @@ abstract class AbstractFinController
      */
     protected function getData(Request $request): array
     {
-        $result = json_decode($request->getContent(), true);
+        if (is_resource($request->getContent())) {
+            throw new ApiRequestException(ApiRequestException::INVALID_JSON_DATA);
+        }
+        $result = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         if (null === $result) {
             throw new ApiRequestException(ApiRequestException::INVALID_JSON_DATA);
         }
