@@ -1,18 +1,18 @@
 <?php
-declare(strict_types = 1);
-namespace App\Tests\Mocks\Finance\Services;
+namespace App\Tests\Mocks\Finance\Repositories;
 
 use App\Entity\Finance\Category;
-use App\Service\Finance\CategoryService;
-use App\Tests\Utils\ReflectionFactory;
+use App\Repository\Finance\CategoryRepository;
 
-class CategoryServiceMock extends CategoryService
+class CategoryRepositoryMock extends CategoryRepository
 {
-    public static ?Category $category = null;
-
     public static array $categories = [];
 
+    public static ?Category $category = null;
+
     public static int $countGetAllCategories = 0;
+
+    public static int $countGetOneCategoryById = 0;
 
     public static int $countFindOneCategoryById = 0;
 
@@ -22,6 +22,7 @@ class CategoryServiceMock extends CategoryService
         self::$category = null;
         self::$categories = [];
         self::$countGetAllCategories = 0;
+        self::$countGetOneCategoryById = 0;
         self::$countFindOneCategoryById = 0;
     }
 
@@ -34,13 +35,15 @@ class CategoryServiceMock extends CategoryService
 
     public function getOneCategoryById(int $categoryId): Category
     {
+        self::$countGetOneCategoryById++;
+
+        return self::$category;
+    }
+
+    public function findOneCategoryById(int $categoryId): ?Category
+    {
         self::$countFindOneCategoryById++;
 
-        $category = self::$category;
-        if (null === $category) {
-            $category = ReflectionFactory::createInstanceOfClass(Category::class);
-        }
-
-        return $category;
+        return self::$category;
     }
 }

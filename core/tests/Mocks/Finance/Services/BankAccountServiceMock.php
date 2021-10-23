@@ -11,10 +11,21 @@ class BankAccountServiceMock extends BankAccountService
 
     public static int $countFindBankAccountById = 0;
 
+    public static int $countGetBankAccountById = 0;
+
+    /** @noinspection PhpMissingParentConstructorInspection */
     public function __construct()
     {
         self::$bankAccount = null;
         self::$countFindBankAccountById = 0;
+        self::$countGetBankAccountById = 0;
+    }
+
+    public function getBankAccountById(int $bankAccountId): BankAccount
+    {
+        self::$countGetBankAccountById++;
+
+        return self::$bankAccount;
     }
 
     public function findBankAccountById(int $bankAccountId): ?BankAccount

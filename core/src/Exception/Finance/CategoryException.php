@@ -5,9 +5,11 @@ namespace App\Exception\Finance;
 use App\Exception\Common\FinException;
 use Symfony\Component\HttpFoundation\Response;
 
-class BankAccountException extends FinException
+class CategoryException extends FinException
 {
-    public const NOT_FOUND = 1;
+    public const NO_CATEGORIES_SET = 1;
+
+    public const NOT_FOUND = 2;
 
     public function __construct(int $type = FinException::UNKNOWN, array $context = [])
     {
@@ -16,8 +18,12 @@ class BankAccountException extends FinException
         $this->type = $type;
 
         switch ($type) {
+            case self::NO_CATEGORIES_SET:
+                parent::__construct('No categories set', $context);
+                $this->httpStatusCode = Response::HTTP_FORBIDDEN;
+                break;
             case self::NOT_FOUND:
-                parent::__construct('No bank account found', $context);
+                parent::__construct('No category found', $context);
                 $this->httpStatusCode = Response::HTTP_FORBIDDEN;
                 break;
         }

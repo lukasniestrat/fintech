@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace App\Service\Finance;
 
 use App\Entity\Finance\Category;
+use App\Exception\Finance\CategoryException;
 use App\Repository\Finance\CategoryRepository;
 
 class CategoryService
@@ -12,13 +13,19 @@ class CategoryService
     ) {
     }
 
+    /**
+     * @throws CategoryException
+     */
     public function getAllCategories(): array
     {
         return $this->categoryRepository->getAllCategories();
     }
 
-    public function findOneCategoryById(int $categoryId): ?Category
+    /**
+     * @throws CategoryException
+     */
+    public function getOneCategoryById(int $categoryId): Category
     {
-        return $this->categoryRepository->findOneCategoryById($categoryId);
+        return $this->categoryRepository->getOneCategoryById($categoryId);
     }
 }

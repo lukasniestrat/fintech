@@ -2,6 +2,7 @@
 namespace App\Controller\Common;
 
 use App\Exception\Common\ApiRequestException;
+use App\Model\Common\RequestMetaData;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -31,5 +32,17 @@ abstract class AbstractFinController
         }
 
         return $result;
+    }
+
+    protected function getMetaHeaderData(RequestMetaData $metaData): array
+    {
+        return [
+            'FIN-Meta-Total' => $metaData->getTotal(),
+            'FIN-Meta-Limit' => $metaData->getLimit(),
+            'FIN-Meta-Offset' => $metaData->getOffset(),
+            'FIN-Meta-OrderBy' => $metaData->getOrderBy(),
+            'FIN-Meta-OrderSequence' => $metaData->getOrderSequence(),
+            'FIN-Meta-Search' => $metaData->getSearch(),
+        ];
     }
 }

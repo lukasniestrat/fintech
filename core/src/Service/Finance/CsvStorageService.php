@@ -10,21 +10,25 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CsvStorageService
 {
+    public function __construct(private string $uploadPath)
+    {
+    }
+
     /**
      * @throws UploadFileException
      * @throws Exception
      */
-    public function storeFile(UploadedFile $uploadedFile, string $path): string
+    public function storeFile(UploadedFile $uploadedFile): string
     {
         $this->validateFileExtension($uploadedFile);
         $fileName = $this->generateFileName($uploadedFile->getClientOriginalName(), 'csv');
 
         try {
-            $uploadedFile->move($path, $fileName);
+            $uploadedFile->move($this->uploadPath, $fileName);
         } catch (FileException $e) {
         }
 
-        return $path . '/' . $fileName;
+        return $this->uploadPath . '/' . $fileName;
     }
 
     /**

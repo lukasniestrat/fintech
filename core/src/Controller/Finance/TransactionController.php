@@ -3,8 +3,12 @@ declare(strict_types = 1);
 namespace App\Controller\Finance;
 
 use App\Controller\Common\AbstractFinController;
+use App\Exception\Common\ApiRequestException;
 use App\Exception\Common\UploadFileException;
 use App\Exception\Finance\BankAccountException;
+use App\Exception\Finance\CategoryException;
+use App\Service\Finance\BankAccountService;
+use App\Service\Finance\CsvStorageService;
 use App\Service\Finance\Serializer\TransactionSerializer;
 use App\Service\Finance\TransactionService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,33 +19,54 @@ use Symfony\Component\Routing\Annotation\Route;
 class TransactionController extends AbstractFinController
 {
     public function __construct(
+        private BankAccountService $bankAccountService,
         private TransactionService $transactionService,
         private TransactionSerializer $transactionSerializer,
+        private CsvStorageService $csvStorageService,
     ) {
     }
 
     /**
-     * @throws UploadFileException
      * @throws BankAccountException
+     * @throws ApiRequestException
+     * @throws CategoryException
      */
     #[Route('/transactions/import', methods: ['POST', 'HEAD'])]
     public function importTransactions(Request $request): JsonResponse
     {
+        $data = $this->getData($request);
+        $bankAccount = $this->bankAccountService->getBankAccountById((int) $data['bankAccountId']);
+
+        $uncategorizedTransactions = [];
+        $uncategorizedTransactionsList = $this->transactionService->importTransactions($data['csvFilePath'], $bankAccount);
+
+        foreach ($uncategorizedTransactionsList->getList() as $uncategorizedTransaction) {
+            $uncategorizedTransactions[] = $this->transactionSerializer->serialize($uncategorizedTransaction);
+        }
+
+        return new JsonResponse(
+            $uncategorizedTransactions,
+            Response::HTTP_OK,
+            $this->getMetaHeaderData($uncategorizedTransactionsList->getMetaData())
+        );
+    }
+
+    /**
+     * @throws UploadFileException
+     */
+    #[Route('/transactions/uploadcsv', methods: ['POST', 'HEAD'])]
+    public function uploadTransactionCsvFile(Request $request): JsonResponse
+    {
+        $filePath = '';
         $uploadedFile = null;
-        if ($request->files->has('transactions_csv')) {
-            $uploadedFile = $request->files->get('transactions_csv');
+        if ($request->files->has('transactionsCsv')) {
+            $uploadedFile = $request->files->get('transactionsCsv');
+            $filePath = $this->csvStorageService->storeFile($uploadedFile);
         }
         if (null === $uploadedFile) {
             throw new UploadFileException(UploadFileException::NO_FILE, ['reason' => 'no file set']);
         }
 
-        $uncategorizedTransactions = [];
-        $uncategorizedTransactionsList = $this->transactionService->importTransactions($uploadedFile, (int) $request->get('bankaccount_id'));
-
-        foreach ($uncategorizedTransactionsList as $uncategorizedTransaction) {
-            $uncategorizedTransactions[] = $this->transactionSerializer->serialize($uncategorizedTransaction);
-        }
-
-        return new JsonResponse(['uncategorizedTransactions' => $uncategorizedTransactions], Response::HTTP_OK);
+        return new JsonResponse(['filePath' => $filePath], Response::HTTP_OK);
     }
 }

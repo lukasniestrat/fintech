@@ -2,50 +2,47 @@
 declare(strict_types = 1);
 namespace App\Service\Finance;
 
+use App\Entity\Finance\BankAccount;
 use App\Entity\Finance\Category;
 use App\Entity\Finance\Transaction;
-use App\Exception\Common\UploadFileException;
-use App\Exception\Finance\BankAccountException;
+use App\Exception\Finance\CategoryException;
 use App\Model\Common\FinConstants;
+use App\Model\Common\ModelList;
+use App\Model\Common\RequestMetaData;
 use App\Repository\Finance\TransactionRepository;
 use DateTime;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class TransactionService
 {
     public function __construct(
-        private CsvStorageService $csvStorageService,
-        private BankAccountService $bankAccountService,
         private CategoryService $categoryService,
         private TransactionRepository $transactionRepository,
     ) {
     }
 
     /**
-     * @throws UploadFileException
-     * @throws BankAccountException
+     * @throws CategoryException
      */
-    public function importTransactions(UploadedFile $uploadedFile, int $bankAccountId): array
+    public function importTransactions(string $csvFilePath, BankAccount $bankAccount): ModelList
     {
-        $fileLink = $this->csvStorageService->storeFile($uploadedFile, 'csv/transactions');
-        $bankAccount = $this->bankAccountService->findBankAccountById($bankAccountId);
-        if (null === $bankAccount) {
-            throw new BankAccountException(BankAccountException::NO_BANK_ACCOUNT_FOUND, ['reason' => 'Bank account not found']);
-        }
-
-        $file = fopen($fileLink, 'r');
-        $uncategorizedTransactions = [];
+        $file = fopen($csvFilePath, 'rb');
+        $list = [];
 
         if ($file) {
-            fgetcsv($file, 10000, ';');
-            while (($transactionCsv = fgetcsv($file, 10000, ';')) !== false) {
+            fgetcsv($file, 10000, Transaction::CSV_SEPERATOR);
+            while (($transactionCsv = fgetcsv($file, 10000, Transaction::CSV_SEPERATOR)) !== false) {
+                $name = preg_replace('!\s+!', ' ', $transactionCsv[11]);
+                $subject = preg_replace('!\s+!', ' ', $transactionCsv[4]);
+                $dateArray = explode('.', $transactionCsv[1]);
+
                 $transaction = new Transaction();
                 $transaction
                     ->setBankAccount($bankAccount)
-                    ->setName($transactionCsv[11])
-                    ->setSubject($transactionCsv[4])
-                    ->setAmount(floatval(str_replace(',', '.', $transactionCsv[14])))
-                    ->setBookingDate(new DateTime($transactionCsv[1]))
+                    ->setName($name)
+                    ->setSubject($subject)
+                    ->setAmount((float) str_replace(',', '.', $transactionCsv[14]))
+                    ->setBookingDate(new DateTime($dateArray[2] . '-' . $dateArray[1] . '-' . $dateArray[0]))
                     ->setIban($transactionCsv[12]);
 
                 if (false === $this->checkIfTransactionExists($transaction)) {
@@ -54,17 +51,17 @@ class TransactionService
 
                     // can't sort any category 1 is default
                     if (1 === $category->getId()) {
-                        $uncategorizedTransactions[] = $transaction;
+                        $list[] = $transaction;
                     }
 
                     $this->transactionRepository->storeTransaction($transaction);
                 }
             }
 
-            return $uncategorizedTransactions;
-        } else {
-            die('Unable to open file');
+            return new ModelList($list, new RequestMetaData(count($list), 0, 0, 'id', 'asc'));
         }
+
+        throw new FileException('File not found');
     }
 
     public function findTransactionsBySubject(string $subject): ?array
@@ -73,7 +70,8 @@ class TransactionService
     }
 
     /**
-     * Search for matching category
+     * Search for a matching category
+     * @throws CategoryException
      */
     private function getCategoryForTransaction(Transaction $transaction): Category
     {
@@ -90,7 +88,7 @@ class TransactionService
             }
         }
 
-        return $this->categoryService->findOneCategoryById(1);
+        return $this->categoryService->getOneCategoryById(1);
     }
 
     /**

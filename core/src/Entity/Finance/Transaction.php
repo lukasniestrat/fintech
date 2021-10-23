@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Transaction
 {
+    public const CSV_SEPERATOR = ';';
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -65,7 +67,7 @@ class Transaction
             'id' => $this->getId(),
             'name' => $this->getName(),
             'subject' => $this->getSubject(),
-            'amount' => $this->getSubject(),
+            'amount' => $this->getAmount(),
             'bookingDate' => $this->getBookingDate()->format(FinConstants::DATE_FORMAT_DATE_ONLY),
             'iban' => $this->getIban(),
             'category' => $this->getCategory()->toArray(),
