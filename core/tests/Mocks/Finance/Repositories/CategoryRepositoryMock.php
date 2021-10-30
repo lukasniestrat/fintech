@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace App\Tests\Mocks\Finance\Repositories;
 
 use App\Entity\Finance\Category;

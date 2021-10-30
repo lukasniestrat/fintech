@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace App\Entity\Finance;
 
 use App\Model\Common\FinConstants;
+use App\Model\Common\Serializable;
 use App\Repository\Finance\TransactionRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=TransactionRepository::class)
  */
-class Transaction
+class Transaction implements Serializable
 {
     public const CSV_SEPERATOR = ';';
 
@@ -57,8 +58,11 @@ class Transaction
      */
     private Category $category;
 
-    public function __construct()
+    public function __construct(string $name, string $subject, BankAccount $bankAccount)
     {
+        $this->name = $name;
+        $this->subject = $subject;
+        $this->bankAccount = $bankAccount;
     }
 
     public function toArray(): array

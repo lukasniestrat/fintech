@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace App\Exception\Common;
 
 class ApiRequestException extends FinException

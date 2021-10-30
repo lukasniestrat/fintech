@@ -1,31 +1,22 @@
 <?php
 declare(strict_types = 1);
-namespace App\Tests\Functional\Common;
+namespace App\Tests\Integration\Common;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-abstract class AbstractFinApiTest extends WebTestCase
+abstract class AbstractFinIntegrationTest extends KernelTestCase
 {
-    protected const HTTP_GET = 'GET';
-
-    protected const HTTP_POST = 'POST';
-
-    protected const HTTP_PUT = 'PUT';
-
-    protected const HTTP_DELETE = 'DELETE';
-
     /** @var Connection $connection */
-    protected ?object $connection = null;
+    protected ?object $connection;
 
-    protected KernelBrowser $client;
+    private ?EntityManagerInterface $entityManager = null;
 
     protected function setUp(): void
     {
-        $this->client = self::createClient([], ['HTTP_User_Agent' => 'Linux']);
-        $this->client->disableReboot();
+        self::bootKernel();
 
         $this->setContainerMocks();
 
@@ -45,32 +36,13 @@ abstract class AbstractFinApiTest extends WebTestCase
             $this->connection->close();
             $this->connection = null;
         }
+        if (null !== $this->entityManager) {
+            $this->entityManager->clear();
+            $this->entityManager->close();
+            $this->entityManager = null;
+        }
 
         parent::tearDown();
-    }
-
-    public function getData(string $jsonContent): array
-    {
-        return json_decode($jsonContent, true, 512, JSON_THROW_ON_ERROR);
-    }
-
-    protected function request(
-        $httpVerb,
-        $route,
-        $data = [],
-        $parameters = [],
-        $files = []
-    ) {
-        $this->client->request(
-            $httpVerb,
-            $route,
-            $parameters,
-            $files,
-            [],
-            json_encode($data, JSON_THROW_ON_ERROR)
-        );
-
-        return $this->client->getResponse();
     }
 
     protected function executeFixture(string $pathToFixture, bool $removeCommentIndicators = true): void
@@ -88,6 +60,25 @@ abstract class AbstractFinApiTest extends WebTestCase
             }
             $this->connection->executeStatement($cleanStatement);
         }
+    }
+
+    protected function getCurrentAutoIncForTable(string $tableName): ?int
+    {
+        $result = $this->connection->executeQuery(
+            'SELECT `AUTO_INCREMENT` FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = DATABASE() AND  TABLE_NAME = :tableName',
+            [':tableName' => $tableName]
+        )->fetchColumn();
+
+        return '' === $result ? null : (int) $result;
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = static::$container->get('doctrine.orm.entity_manager');
+        }
+
+        return $this->entityManager;
     }
 
     protected function setContainerMocks(): void

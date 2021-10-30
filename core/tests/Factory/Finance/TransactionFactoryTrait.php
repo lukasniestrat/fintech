@@ -10,14 +10,14 @@ use DateTime;
 trait TransactionFactoryTrait
 {
     private function getTransactionMock(
-        string $name,
-        float $amount,
-        string $subject,
         BankAccount $bankAccount,
-    ): Transaction {
+        string $name = 'EWE Stromrechnung',
+        string $subject = 'EWE GmbH & Co. KG'
+    ): Transaction
+    {
         $transaction = ReflectionFactory::createInstanceOfClass(Transaction::class);
         ReflectionFactory::setPrivateProperty($transaction, 'name', $name);
-        ReflectionFactory::setPrivateProperty($transaction, 'amount', $amount);
+        ReflectionFactory::setPrivateProperty($transaction, 'amount', -19.99);
         ReflectionFactory::setPrivateProperty($transaction, 'subject', $subject);
         ReflectionFactory::setPrivateProperty($transaction, 'bankAccount', $bankAccount);
         ReflectionFactory::setPrivateProperty($transaction, 'iban', 'DE1234567890');

@@ -45,7 +45,7 @@ class ReflectionFactory
     /**
      * @throws ReflectionException
      */
-    public static function callPrivateMethod(object $object, string $methodName, ...$args): object
+    public static function callPrivateMethod(object $object, string $methodName, ...$args): mixed
     {
         $refObject = new ReflectionObject($object);
         $refMethod = $refObject->getMethod($methodName);

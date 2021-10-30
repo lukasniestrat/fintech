@@ -7,7 +7,7 @@ use App\Tests\Utils\ReflectionFactory;
 
 trait BankAccountFactoryTrait
 {
-    private function getBankAccountMock(string $name, bool $isSavingAccount = false): BankAccount
+    private function getBankAccountMock(string $name = 'Girokonto', bool $isSavingAccount = false): BankAccount
     {
         $bankAccount = ReflectionFactory::createInstanceOfClass(BankAccount::class);
         ReflectionFactory::setPrivateProperty($bankAccount, 'name', $name);

@@ -4,6 +4,7 @@ namespace App\Tests\Mocks\Finance\Services;
 
 use App\Entity\Finance\BankAccount;
 use App\Service\Finance\BankAccountService;
+use App\Tests\Utils\ReflectionFactory;
 
 class BankAccountServiceMock extends BankAccountService
 {
@@ -25,7 +26,12 @@ class BankAccountServiceMock extends BankAccountService
     {
         self::$countGetBankAccountById++;
 
-        return self::$bankAccount;
+        $bankAccount = self::$bankAccount;
+        if (null === $bankAccount) {
+            $bankAccount = ReflectionFactory::createInstanceOfClass(BankAccount::class);
+        }
+
+        return $bankAccount;
     }
 
     public function findBankAccountById(int $bankAccountId): ?BankAccount

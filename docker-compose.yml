@@ -31,6 +31,7 @@ services:
       MYSQL_ROOT_PASSWORD: '${MYSQL_ROOT_PASS}'
       MYSQL_USER: '${MYSQL_USER}'
       MYSQL_PASSWORD: '${MYSQL_PASS}'
+      MYSQL_DATABASE: '${MYSQL_DB}'
     volumes:
       - ./docker/db:/docker-entrypoint-initdb.d
     networks:

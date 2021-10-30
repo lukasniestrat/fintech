@@ -63,10 +63,10 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
-        "phpstan": ["vendor/bin/phpstan.phar analyse -c phpstan.neon.dist"]
+        "phpstan": ["vendor/bin/phpstan.phar analyse --memory-limit 1G -c phpstan.neon.dist"]
     },
     "conflict": {
-        "symfony/symfony": "*"
+        "symfony/symfony": "*",ApiRequestException
     },
     "extra": {
         "symfony": {

@@ -3,7 +3,12 @@ declare(strict_types = 1);
 namespace App\Repository\Finance;
 
 use App\Entity\Finance\Transaction;
+use App\Exception\Finance\TransactionException;
+use App\Model\Common\ModelList;
+use App\Model\Common\RequestMetaData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 class TransactionRepository extends ServiceEntityRepository
@@ -21,6 +26,12 @@ class TransactionRepository extends ServiceEntityRepository
         return $transaction;
     }
 
+    public function removeTransaction(Transaction $transaction): void
+    {
+        $this->getEntityManager()->remove($transaction);
+        $this->getEntityManager()->flush();
+    }
+
     public function findTransactionsBySubject(string $subject): ?array
     {
         $result = $this->getEntityManager()
@@ -32,5 +43,46 @@ class TransactionRepository extends ServiceEntityRepository
         }
 
         return $result;
+    }
+
+    /**
+     * @throws TransactionException
+     */
+    public function getTransactionById(int $id): Transaction
+    {
+        $transaction = $this->findTransactionById($id);
+
+        if (null === $transaction) {
+            throw new TransactionException(TransactionException::NOT_FOUND, ['reason' => sprintf('No transaction with id %s found', $id)]);
+        }
+
+        return $transaction;
+    }
+
+    public function findTransactionById(int $id): ?Transaction
+    {
+        return $this->getEntityManager()
+            ->getRepository(Transaction::class)
+            ->find($id);
+    }
+
+    public function getTransactions(RequestMetaData $requestMetaData): ModelList
+    {
+        $query = $this->getEntityManager()->createQueryBuilder()
+            ->select('transaction')
+            ->from(Transaction::class, 'transaction')
+            ->setFirstResult($requestMetaData->getOffset())
+            ->setMaxResults($requestMetaData->getLimit())
+            ->addOrderBy('transaction.' . $requestMetaData->getOrderBy(), $requestMetaData->getOrderSequence())
+            ->getQuery()
+            ->setHydrationMode(AbstractQuery::HYDRATE_OBJECT);
+
+        $paginator = new Paginator($query);
+        $paginator->setUseOutputWalkers(false);
+
+        $result = $paginator->getIterator()->getArrayCopy();
+        $requestMetaData->setTotal($paginator->count());
+
+        return new ModelList($result, $requestMetaData);
     }
 }

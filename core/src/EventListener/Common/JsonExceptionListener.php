@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 namespace App\EventListener\Common;
 
 use App\Exception\Common\FinException;

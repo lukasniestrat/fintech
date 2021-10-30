@@ -6,6 +6,7 @@ use App\Entity\Finance\BankAccount;
 use App\Entity\Finance\Category;
 use App\Entity\Finance\Transaction;
 use App\Exception\Finance\CategoryException;
+use App\Exception\Finance\TransactionException;
 use App\Model\Common\FinConstants;
 use App\Model\Common\ModelList;
 use App\Model\Common\RequestMetaData;
@@ -36,11 +37,8 @@ class TransactionService
                 $subject = preg_replace('!\s+!', ' ', $transactionCsv[4]);
                 $dateArray = explode('.', $transactionCsv[1]);
 
-                $transaction = new Transaction();
+                $transaction = new Transaction($name, $subject, $bankAccount);
                 $transaction
-                    ->setBankAccount($bankAccount)
-                    ->setName($name)
-                    ->setSubject($subject)
                     ->setAmount((float) str_replace(',', '.', $transactionCsv[14]))
                     ->setBookingDate(new DateTime($dateArray[2] . '-' . $dateArray[1] . '-' . $dateArray[0]))
                     ->setIban($transactionCsv[12]);
@@ -54,7 +52,7 @@ class TransactionService
                         $list[] = $transaction;
                     }
 
-                    $this->transactionRepository->storeTransaction($transaction);
+                    $this->storeTransaction($transaction);
                 }
             }
 
@@ -64,9 +62,46 @@ class TransactionService
         throw new FileException('File not found');
     }
 
+    public function storeTransaction(Transaction $transaction): Transaction
+    {
+        return $this->transactionRepository->storeTransaction($transaction);
+    }
+
+    public function removeTransaction(Transaction $transaction): void
+    {
+        $this->transactionRepository->removeTransaction($transaction);
+    }
+
+    /**
+     * @return Transaction[]
+     */
     public function findTransactionsBySubject(string $subject): ?array
     {
         return $this->transactionRepository->findTransactionsBySubject($subject);
+    }
+
+    /**
+     * @throws TransactionException
+     */
+    public function getTransactionById(int $id): Transaction
+    {
+        return $this->transactionRepository->getTransactionById($id);
+    }
+
+    public function getTransactions(RequestMetaData $requestMetaData): ModelList
+    {
+        return $this->transactionRepository->getTransactions($requestMetaData);
+    }
+
+    public function mergeTransactions(Transaction $existingTransaction, Transaction $updateTransaction): Transaction
+    {
+        $existingTransaction
+            ->setName($updateTransaction->getName())
+            ->setSubject($updateTransaction->getSubject())
+            ->setBankAccount($updateTransaction->getBankAccount())
+            ->setCategory($updateTransaction->getCategory());
+
+        return $existingTransaction;
     }
 
     /**
@@ -100,8 +135,8 @@ class TransactionService
 
         if (null !== $existingTransactions) {
             foreach ($existingTransactions as $existingTransaction) {
-                $existingTransactionsBookingDate = $existingTransaction->getBookingDate()->format(FinConstants::DATE_FORMAT_DATE_ONLY);
-                $transactionsBookingDate = $transaction->getBookingDate()->format(FinConstants::DATE_FORMAT_DATE_ONLY);
+                $existingTransactionsBookingDate = $existingTransaction->getBookingDate()?->format(FinConstants::DATE_FORMAT_DATE_ONLY);
+                $transactionsBookingDate = $transaction->getBookingDate()?->format(FinConstants::DATE_FORMAT_DATE_ONLY);
 
                 if ($existingTransactionsBookingDate === $transactionsBookingDate) {
                     return true;
