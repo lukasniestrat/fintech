@@ -26,12 +26,7 @@ class BankAccountServiceMock extends BankAccountService
     {
         self::$countGetBankAccountById++;
 
-        $bankAccount = self::$bankAccount;
-        if (null === $bankAccount) {
-            $bankAccount = ReflectionFactory::createInstanceOfClass(BankAccount::class);
-        }
-
-        return $bankAccount;
+        return self::$bankAccount ?? ReflectionFactory::createInstanceOfClass(BankAccount::class);
     }
 
     public function findBankAccountById(int $id): ?BankAccount

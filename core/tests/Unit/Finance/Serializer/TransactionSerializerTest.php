@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace App\Tests\Unit\Finance;
+namespace Unit\Finance\Serializer;
 
 use App\Model\Common\FinConstants;
 use App\Service\Finance\Serializer\TransactionSerializer;
@@ -55,7 +55,7 @@ class TransactionSerializerTest extends TestCase
     public function test_it_serializes(): void
     {
         $now = new DateTime();
-        $category = $this->getCategoryMock();
+        $category = $this->getCategoryMock('Sonstiges', 'EWE, Telekom');
         $bankAccount = $this->getBankAccountMock();
         $transaction = $this->getTransactionMock($bankAccount);
         ReflectionFactory::setPrivateProperty($transaction, 'category', $category);
@@ -73,7 +73,10 @@ class TransactionSerializerTest extends TestCase
             'category' => [
                 'id' => null,
                 'name' => 'Sonstiges',
-                'tags' => 'EWE, Telekom',
+                'tags' => [
+                    'EWE',
+                    'Telekom'
+                ],
             ],
             'bankAccount' => [
                 'id' => null,

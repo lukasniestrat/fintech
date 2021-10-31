@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace App\Entity\Finance;
 
+use App\Model\Common\Serializable;
 use App\Repository\Finance\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
-class Category
+class Category implements Serializable
 {
     /**
      * @ORM\Id
@@ -27,7 +28,7 @@ class Category
     /**
      * @ORM\Column(type="string", length=510, nullable=true)
      */
-    private string $tags;
+    private ?string $tags;
 
     /**
      * @ORM\ManyToMany(targetEntity=BankAccount::class, inversedBy="categories")
@@ -44,8 +45,10 @@ class Category
      */
     private Collection $transactions;
 
-    public function __construct()
+    public function __construct(string $name, string $tags)
     {
+        $this->name = $name;
+        $this->tags = $tags;
         $this->bankAccount = new ArrayCollection();
         $this->repeatingTransactions = new ArrayCollection();
         $this->transactions = new ArrayCollection();
@@ -56,7 +59,7 @@ class Category
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'tags' => $this->getTags(),
+            'tags' => $this->getTagsAsArray(),
         ];
     }
 
@@ -82,7 +85,7 @@ class Category
         return $this->tags ?? null;
     }
 
-    public function setTags(string $tags): self
+    public function setTags(?string $tags): ?self
     {
         $this->tags = $tags;
 
@@ -171,5 +174,10 @@ class Category
         }
 
         return $this;
+    }
+
+    public function getTagsAsArray(): ?array
+    {
+        return null !== $this->getTags() ? explode(',', str_replace(' ', '', $this->getTags())) : null;
     }
 }

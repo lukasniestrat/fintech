@@ -53,7 +53,7 @@ class TransactionRepository extends ServiceEntityRepository
         $transaction = $this->findTransactionById($id);
 
         if (null === $transaction) {
-            throw new TransactionException(TransactionException::NOT_FOUND, ['reason' => sprintf('No transaction with id %s found', $id)]);
+            throw new TransactionException(TransactionException::NOT_FOUND, ['reason' => sprintf('no transaction with id %s found', $id)]);
         }
 
         return $transaction;

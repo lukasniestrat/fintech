@@ -7,11 +7,13 @@ use App\Tests\Utils\ReflectionFactory;
 
 trait CategoryFactoryTrait
 {
-    public function getCategoryMock(string $name = 'Sonstiges'): Category
-    {
+    public function getCategoryMock(
+        string $name = 'Sonstiges',
+        ?string $tags = null
+    ): Category {
         $category = ReflectionFactory::createInstanceOfClass(Category::class);
         ReflectionFactory::setPrivateProperty($category, 'name', $name);
-        ReflectionFactory::setPrivateProperty($category, 'tags', 'EWE, Telekom');
+        ReflectionFactory::setPrivateProperty($category, 'tags', $tags);
 
         return $category;
     }

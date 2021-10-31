@@ -11,6 +11,8 @@ class CategoryException extends FinException
 
     public const NOT_FOUND = 2;
 
+    public const IMMUTABLE = 3;
+
     public function __construct(int $type = FinException::UNKNOWN, array $context = [])
     {
         parent::__construct('Unkown error', $context);
@@ -24,6 +26,10 @@ class CategoryException extends FinException
                 break;
             case self::NOT_FOUND:
                 parent::__construct('No category found', $context);
+                $this->httpStatusCode = Response::HTTP_FORBIDDEN;
+                break;
+            case self::IMMUTABLE:
+                parent::__construct('Category is immutable', $context);
                 $this->httpStatusCode = Response::HTTP_FORBIDDEN;
                 break;
         }

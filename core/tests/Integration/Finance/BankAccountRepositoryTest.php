@@ -11,11 +11,6 @@ class BankAccountRepositoryTest extends AbstractFinRepositoryTest
 {
     use AssertExceptionTrait;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-    }
-
     public function test_it_gets_bank_account_by_id(): void
     {
         $bankAccount = $this->getRepository()->getBankAccountById(1);
@@ -25,7 +20,7 @@ class BankAccountRepositoryTest extends AbstractFinRepositoryTest
 
         $this->assertException(function (): void {
             $this->getRepository()->getBankAccountById(9999);
-        }, BankAccountException::class, BankAccountException::NOT_FOUND, ['reason' => 'No bank account with id 9999 found']);
+        }, BankAccountException::class, BankAccountException::NOT_FOUND, ['reason' => 'no bank account with id 9999 found']);
     }
 
     public function test_it_finds_bank_account_by_id(): void

@@ -4,6 +4,8 @@ namespace App\Service\Finance;
 
 use App\Entity\Finance\Category;
 use App\Exception\Finance\CategoryException;
+use App\Model\Common\ModelList;
+use App\Model\Common\RequestMetaData;
 use App\Repository\Finance\CategoryRepository;
 
 class CategoryService
@@ -13,12 +15,31 @@ class CategoryService
     ) {
     }
 
+    public function storeCategory(Category $category): Category
+    {
+        return $this->categoryRepository->storeCategory($category);
+    }
+
+    public function mergeCategories(Category $existingCategory, Category $updateCategory): Category
+    {
+        $existingCategory
+            ->setName($updateCategory->getName())
+            ->setTags($updateCategory->getTags());
+
+        return $existingCategory;
+    }
+
     /**
      * @throws CategoryException
      */
-    public function getCategories(): array
+    public function getCategoriesForTransactionImport(): array
     {
-        return $this->categoryRepository->getCategories();
+        return $this->categoryRepository->getCategoriesForTransactionImport();
+    }
+
+    public function getCategories(RequestMetaData $requestMetaData): ModelList
+    {
+        return $this->categoryRepository->getCategories($requestMetaData);
     }
 
     /**

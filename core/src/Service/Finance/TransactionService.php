@@ -111,10 +111,10 @@ class TransactionService
      */
     private function getCategoryForTransaction(Transaction $transaction): Category
     {
-        $categories = $this->categoryService->getCategories();
+        $categories = $this->categoryService->getCategoriesForTransactionImport();
         foreach ($categories as $category) {
             if (null !== $category->getTags()) {
-                $categoryKeys = explode(',', str_replace(' ', '', $category->getTags()));
+                $categoryKeys = $category->getTagsAsArray();
 
                 foreach ($categoryKeys as $categoryKey) {
                     if (str_contains($transaction->getName(), $categoryKey) || str_contains($transaction->getSubject(), $categoryKey)) {

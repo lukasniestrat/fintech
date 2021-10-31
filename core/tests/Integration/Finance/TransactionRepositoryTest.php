@@ -69,7 +69,7 @@ class TransactionRepositoryTest extends AbstractFinRepositoryTest
 
         $this->assertException(function (): void {
             $this->getRepository()->getTransactionById(99999);
-        }, TransactionException::class, TransactionException::NOT_FOUND, ['reason' => 'No transaction with id 99999 found']);
+        }, TransactionException::class, TransactionException::NOT_FOUND, ['reason' => 'no transaction with id 99999 found']);
     }
 
     public function test_it_finds_transaction_by_id(): void

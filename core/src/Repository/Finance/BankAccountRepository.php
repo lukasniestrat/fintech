@@ -21,7 +21,7 @@ class BankAccountRepository extends ServiceEntityRepository
     {
         $bankAccount = $this->findBankAccountById($id);
         if (null === $bankAccount) {
-            throw new BankAccountException(BankAccountException::NOT_FOUND, ['reason' => sprintf('No bank account with id %s found', $id)]);
+            throw new BankAccountException(BankAccountException::NOT_FOUND, ['reason' => sprintf('no bank account with id %s found', $id)]);
         }
 
         return $bankAccount;

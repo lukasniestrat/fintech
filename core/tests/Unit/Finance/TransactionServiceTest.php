@@ -101,7 +101,7 @@ class TransactionServiceTest extends TestCase
         $transaction = $this->getTransactionMock($bankAccount);
 
         $category = ReflectionFactory::callPrivateMethod($this->service, 'getCategoryForTransaction', $transaction);
-        self::assertEquals(1, CategoryServiceMock::$countGetCategories);
+        self::assertEquals(1, CategoryServiceMock::$countGetCategoriesForTransactionImport);
         self::assertInstanceOf(Category::class, $category);
     }
 

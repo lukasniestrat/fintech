@@ -164,7 +164,7 @@ class TransactionControllerTest extends AbstractFinApiTest
         self::assertEquals(200, $response->getStatusCode());
         self::assertJson($response->getContent());
 
-        $data = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data = $this->getData($response->getContent());
         self::assertEquals($expected, $data);
     }
 

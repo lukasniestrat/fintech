@@ -2,7 +2,9 @@
 declare(strict_types = 1);
 namespace App\Tests\Integration\Finance;
 
+use App\Entity\Finance\Category;
 use App\Exception\Finance\CategoryException;
+use App\Model\Common\RequestMetaData;
 use App\Repository\Finance\CategoryRepository;
 use App\Tests\Factory\Common\AssertExceptionTrait;
 use App\Tests\Integration\Common\AbstractFinRepositoryTest;
@@ -11,16 +13,29 @@ class CategoryRepositoryTest extends AbstractFinRepositoryTest
 {
     use AssertExceptionTrait;
 
-    protected function setUp(): void
+    public function test_it_stores_category(): void
     {
-        parent::setUp();
+        $category = new Category('Test', 'test, test, test');
+
+        $nextInsertId = $this->getCurrentAutoIncForTable('category');
+        $newCategory = $this->getRepository()->storeCategory($category);
+
+        self::assertEquals($nextInsertId, $newCategory->getId());
     }
 
-    public function test_it_gets_categories(): void
+    public function test_it_gets_categories_for_transaction_import(): void
     {
-        $categories = $this->getRepository()->getCategories();
+        $categories = $this->getRepository()->getCategoriesForTransactionImport();
 
         self::assertCount(4, $categories);
+    }
+
+    public function test_it_gets_all_categories(): void
+    {
+        $categoriesList = $this->getRepository()->getCategories(new RequestMetaData());
+
+        self::assertEquals(4, $categoriesList->getMetaData()->getTotal());
+        self::assertCount(4, $categoriesList->getList());
     }
 
     public function test_it_gets_category_by_id(): void
@@ -32,7 +47,7 @@ class CategoryRepositoryTest extends AbstractFinRepositoryTest
 
         $this->assertException(function (): void {
             $this->getRepository()->getCategoryById(9999);
-        }, CategoryException::class, CategoryException::NOT_FOUND, ['reason' => 'No category with id 9999 found']);
+        }, CategoryException::class, CategoryException::NOT_FOUND, ['reason' => 'no category with id 9999 found']);
     }
 
     public function test_it_finds_category_by_id(): void

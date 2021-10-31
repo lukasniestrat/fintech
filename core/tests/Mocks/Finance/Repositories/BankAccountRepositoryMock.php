@@ -21,14 +21,14 @@ class BankAccountRepositoryMock extends BankAccountRepository
         self::$countGetBankAccountById = 0;
     }
 
-    public function getBankAccountById(int $bankAccountId): BankAccount
+    public function getBankAccountById(int $id): BankAccount
     {
         self::$countGetBankAccountById++;
 
         return self::$bankAccount;
     }
 
-    public function findBankAccountById(int $bankAccountId): ?BankAccount
+    public function findBankAccountById(int $id): ?BankAccount
     {
         self::$countFindBankAccountById++;
 
