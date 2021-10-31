@@ -12,29 +12,29 @@ class CategoryServiceMock extends CategoryService
 
     public static array $categories = [];
 
-    public static int $countGetAllCategories = 0;
+    public static int $countGetCategories = 0;
 
-    public static int $countFindOneCategoryById = 0;
+    public static int $countFindCategoryById = 0;
 
     /** @noinspection PhpMissingParentConstructorInspection */
     public function __construct()
     {
         self::$category = null;
         self::$categories = [];
-        self::$countGetAllCategories = 0;
-        self::$countFindOneCategoryById = 0;
+        self::$countGetCategories = 0;
+        self::$countFindCategoryById = 0;
     }
 
-    public function getAllCategories(): array
+    public function getCategories(): array
     {
-        self::$countGetAllCategories++;
+        self::$countGetCategories++;
 
         return self::$categories;
     }
 
-    public function getOneCategoryById(int $categoryId): Category
+    public function getCategoryById(int $id): Category
     {
-        self::$countFindOneCategoryById++;
+        self::$countFindCategoryById++;
 
         $category = self::$category;
         if (null === $category) {

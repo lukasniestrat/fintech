@@ -64,7 +64,7 @@ class TransactionControllerTest extends AbstractFinApiTest
                 ],
                 'bankAccount' => [
                     'id' => 1,
-                    'name' => 'Girkonto',
+                    'name' => 'Girokonto',
                     'iban' => 'DE***********5065',
                     'isSavingAccount' => false
                 ]
@@ -111,7 +111,7 @@ class TransactionControllerTest extends AbstractFinApiTest
             ],
             'bankAccount' => [
                 'id' => 1,
-                'name' => 'Girkonto',
+                'name' => 'Girokonto',
                 'iban' => 'DE***********5065',
                 'isSavingAccount' => false
             ]
@@ -142,7 +142,7 @@ class TransactionControllerTest extends AbstractFinApiTest
             ],
             'bankAccount' => [
                 'id' => 1,
-                'name' => 'Girkonto',
+                'name' => 'Girokonto',
                 'iban' => 'DE***********5065',
                 'isSavingAccount' => false
             ]
@@ -193,7 +193,7 @@ class TransactionControllerTest extends AbstractFinApiTest
                 ],
                 'bankAccount' => [
                     'id' => 1,
-                    'name' => 'Girkonto',
+                    'name' => 'Girokonto',
                     'iban' => 'DE***********5065',
                     'isSavingAccount' => false
                 ]

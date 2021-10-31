@@ -17,20 +17,20 @@ class BankAccountRepository extends ServiceEntityRepository
     /**
      * @throws BankAccountException
      */
-    public function getBankAccountById(int $bankAccountId): BankAccount
+    public function getBankAccountById(int $id): BankAccount
     {
-        $bankAccount = $this->findBankAccountById($bankAccountId);
+        $bankAccount = $this->findBankAccountById($id);
         if (null === $bankAccount) {
-            throw new BankAccountException(BankAccountException::NOT_FOUND, ['reason' => 'No bank account with ' . $bankAccountId . ' found']);
+            throw new BankAccountException(BankAccountException::NOT_FOUND, ['reason' => sprintf('No bank account with id %s found', $id)]);
         }
 
         return $bankAccount;
     }
 
-    public function findBankAccountById(int $bankAccountId): ?BankAccount
+    public function findBankAccountById(int $id): ?BankAccount
     {
         return $this->getEntityManager()
             ->getRepository(BankAccount::class)
-            ->find($bankAccountId);
+            ->find($id);
     }
 }

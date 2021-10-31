@@ -16,13 +16,13 @@ class BankAccountService
     /**
      * @throws BankAccountException
      */
-    public function getBankAccountById(int $bankAccountId): BankAccount
+    public function getBankAccountById(int $id): BankAccount
     {
-        return $this->bankAccountRepository->getBankAccountById($bankAccountId);
+        return $this->bankAccountRepository->getBankAccountById($id);
     }
 
-    public function findBankAccountById(int $bankAccountId): ?BankAccount
+    public function findBankAccountById(int $id): ?BankAccount
     {
-        return $this->bankAccountRepository->findBankAccountById($bankAccountId);
+        return $this->bankAccountRepository->findBankAccountById($id);
     }
 }

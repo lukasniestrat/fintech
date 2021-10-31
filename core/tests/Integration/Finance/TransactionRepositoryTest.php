@@ -72,6 +72,18 @@ class TransactionRepositoryTest extends AbstractFinRepositoryTest
         }, TransactionException::class, TransactionException::NOT_FOUND, ['reason' => 'No transaction with id 99999 found']);
     }
 
+    public function test_it_finds_transaction_by_id(): void
+    {
+        $transaction = $this->getRepository()->findTransactionById(1);
+
+        self::assertEquals(1, $transaction->getId());
+        self::assertEquals('EWE Stromrechnung', $transaction->getName());
+
+        $transaction = $this->getRepository()->findTransactionById(9999);
+
+        self::assertNull($transaction);
+    }
+
     public function test_it_gets_all_transactions(): void
     {
         $transactionsList = $this->getRepository()->getTransactions(new RequestMetaData());

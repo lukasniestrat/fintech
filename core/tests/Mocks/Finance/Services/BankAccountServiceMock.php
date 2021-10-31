@@ -22,7 +22,7 @@ class BankAccountServiceMock extends BankAccountService
         self::$countGetBankAccountById = 0;
     }
 
-    public function getBankAccountById(int $bankAccountId): BankAccount
+    public function getBankAccountById(int $id): BankAccount
     {
         self::$countGetBankAccountById++;
 
@@ -34,7 +34,7 @@ class BankAccountServiceMock extends BankAccountService
         return $bankAccount;
     }
 
-    public function findBankAccountById(int $bankAccountId): ?BankAccount
+    public function findBankAccountById(int $id): ?BankAccount
     {
         self::$countFindBankAccountById++;
 

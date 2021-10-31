@@ -17,10 +17,11 @@ class CategoryRepository extends ServiceEntityRepository
     /**
      * @throws CategoryException
      */
-    public function getAllCategories(): array
+    public function getCategories(): array
     {
-        $categories = $this->getEntityManager()->getRepository(Category::class)->findAll();
-
+        $categories = $this->getEntityManager()
+            ->getRepository(Category::class)
+            ->findAll();
         if (0 === count($categories)) {
             throw new CategoryException(CategoryException::NO_CATEGORIES_SET, ['reason' => 'There are no categories in the database']);
         }
@@ -31,18 +32,20 @@ class CategoryRepository extends ServiceEntityRepository
     /**
      * @throws CategoryException
      */
-    public function getOneCategoryById(int $categoryId): Category
+    public function getCategoryById(int $id): Category
     {
-        $category = $this->findOneCategoryById($categoryId);
+        $category = $this->findCategoryById($id);
         if (null === $category) {
-            throw new CategoryException(CategoryException::NOT_FOUND, ['reason' => 'No category with ' . $categoryId . ' found']);
+            throw new CategoryException(CategoryException::NOT_FOUND, ['reason' => sprintf('No category with id %s found', $id)]);
         }
 
         return $category;
     }
 
-    public function findOneCategoryById(int $categoryId): ?Category
+    public function findCategoryById(int $id): ?Category
     {
-        return $this->getEntityManager()->getRepository(Category::class)->findOneBy(['id' => $categoryId]);
+        return $this->getEntityManager()
+            ->getRepository(Category::class)
+            ->find($id);
     }
 }

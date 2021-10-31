@@ -107,10 +107,11 @@ class TransactionService
     /**
      * Search for a matching category
      * @throws CategoryException
+     * @default id: 1, name: Sonstiges
      */
     private function getCategoryForTransaction(Transaction $transaction): Category
     {
-        $categories = $this->categoryService->getAllCategories();
+        $categories = $this->categoryService->getCategories();
         foreach ($categories as $category) {
             if (null !== $category->getTags()) {
                 $categoryKeys = explode(',', str_replace(' ', '', $category->getTags()));
@@ -123,7 +124,7 @@ class TransactionService
             }
         }
 
-        return $this->categoryService->getOneCategoryById(1);
+        return $this->categoryService->getCategoryById(1);
     }
 
     /**

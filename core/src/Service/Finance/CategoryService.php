@@ -16,16 +16,16 @@ class CategoryService
     /**
      * @throws CategoryException
      */
-    public function getAllCategories(): array
+    public function getCategories(): array
     {
-        return $this->categoryRepository->getAllCategories();
+        return $this->categoryRepository->getCategories();
     }
 
     /**
      * @throws CategoryException
      */
-    public function getOneCategoryById(int $categoryId): Category
+    public function getCategoryById(int $id): Category
     {
-        return $this->categoryRepository->getOneCategoryById($categoryId);
+        return $this->categoryRepository->getCategoryById($id);
     }
 }

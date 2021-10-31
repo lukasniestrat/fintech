@@ -18,7 +18,7 @@ final class Version20210926172632 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
-        $this->addSql('INSERT INTO bank_account (name, iban, is_saving_account) VALUES ("Girkonto", "DE***********5065", 0)');
+        $this->addSql('INSERT INTO bank_account (name, iban, is_saving_account) VALUES ("Girokonto", "DE***********5065", 0)');
         $this->addSql('INSERT INTO category (name, tags) VALUES("Sonstiges", null)');
         $this->addSql('INSERT INTO category (name, tags) VALUES("Wohnen", "EWE, Telekom, Miete")');
         $this->addSql('INSERT INTO category (name, tags) VALUES("Lebensmittel", "Edeka, Combi, Lidl, Aldi")');

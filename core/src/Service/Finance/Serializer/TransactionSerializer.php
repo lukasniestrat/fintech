@@ -42,7 +42,7 @@ class TransactionSerializer extends AbstractFinSerializer
         $this->validateStructure($serializedTransaction);
 
         $bankAccount = $this->bankAccountService->getBankAccountById((int) $serializedTransaction['bankAccount']['id']);
-        $category = $this->categoryService->getOneCategoryById((int) $serializedTransaction['category']['id']);
+        $category = $this->categoryService->getCategoryById((int) $serializedTransaction['category']['id']);
 
         $transaction = new Transaction($serializedTransaction['name'], $serializedTransaction['subject'], $bankAccount);
         $transaction->setCategory($category);

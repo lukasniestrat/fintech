@@ -52,6 +52,9 @@ class TransactionController extends AbstractFinController
         );
     }
 
+    /**
+     * @throws TransactionException
+     */
     #[Route('/transactions/{id}', methods: ['DELETE', 'HEAD'])]
     public function removeTransaction(int $id, Request $request): JsonResponse
     {
@@ -74,7 +77,10 @@ class TransactionController extends AbstractFinController
         $transaction = $this->transactionService->mergeTransactions($transaction, $delta);
         $transaction = $this->transactionService->storeTransaction($transaction);
 
-        return new JsonResponse($this->transactionSerializer->serialize($transaction), Response::HTTP_OK);
+        return new JsonResponse(
+            $this->transactionSerializer->serialize($transaction),
+            Response::HTTP_OK
+        );
     }
 
     #[Route('/transactions', methods: ['GET', 'HEAD'])]
@@ -95,12 +101,18 @@ class TransactionController extends AbstractFinController
         );
     }
 
+    /**
+     * @throws TransactionException
+     */
     #[Route('/transactions/{id}', methods: ['GET', 'HEAD'])]
     public function getTransaction(int $id): JsonResponse
     {
         $transaction = $this->transactionService->getTransactionById($id);
 
-        return new JsonResponse($this->transactionSerializer->serialize($transaction), Response::HTTP_OK);
+        return new JsonResponse(
+            $this->transactionSerializer->serialize($transaction),
+            Response::HTTP_OK
+        );
     }
 
     /**
@@ -119,6 +131,9 @@ class TransactionController extends AbstractFinController
             throw new UploadFileException(UploadFileException::NO_FILE, ['reason' => 'no file set']);
         }
 
-        return new JsonResponse(['filePath' => $filePath], Response::HTTP_OK);
+        return new JsonResponse(
+            ['filePath' => $filePath],
+            Response::HTTP_OK
+        );
     }
 }
