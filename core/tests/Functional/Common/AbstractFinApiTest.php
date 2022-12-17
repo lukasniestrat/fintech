@@ -3,9 +3,11 @@ declare(strict_types = 1);
 namespace App\Tests\Functional\Common;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use RuntimeException;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractFinApiTest extends WebTestCase
 {
@@ -22,6 +24,9 @@ abstract class AbstractFinApiTest extends WebTestCase
 
     protected KernelBrowser $client;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         $this->client = self::createClient([], ['HTTP_User_Agent' => 'Linux']);
@@ -29,7 +34,7 @@ abstract class AbstractFinApiTest extends WebTestCase
 
         $this->setContainerMocks();
 
-        $this->connection = static::$container->get('doctrine.dbal.default_connection');
+        $this->connection = static::getContainer()->get('doctrine.dbal.default_connection');
         if (false === $this->connection->isConnected()) {
             $this->connection->connect();
         }
@@ -60,7 +65,7 @@ abstract class AbstractFinApiTest extends WebTestCase
         $data = [],
         $parameters = [],
         $files = []
-    ) {
+    ): Response {
         $this->client->request(
             $httpVerb,
             $route,
@@ -92,7 +97,7 @@ abstract class AbstractFinApiTest extends WebTestCase
 
     protected function setContainerMocks(): void
     {
-        if (null === static::$container) {
+        if (null === static::getContainer()) {
             throw new RuntimeException('For replacing services with mocks the container must be set!');
         }
     }

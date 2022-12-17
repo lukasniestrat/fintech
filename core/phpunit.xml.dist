@@ -27,6 +27,13 @@
         <include>
             <directory suffix=".php">src</directory>
         </include>
+        <exclude>
+            <directory>src/*/Tests</directory>
+        </exclude>
+        <report>
+            <html outputDirectory="./tmp/Report" lowUpperBound="68" highLowerBound="90"/>
+            <text outputFile="php://stdout" showUncoveredFiles="false" showOnlySummary="true"/>
+        </report>
     </coverage>
 
     <listeners>

@@ -4,4 +4,7 @@ parameters:
     level: 7
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
+    checkUninitializedProperties: true
     reportMaybes: true
+    excludePaths:
+        - %currentWorkingDirectory%/src/*/Tests/*
