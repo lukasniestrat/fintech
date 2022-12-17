@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CsvStorageService
 {
-    public function __construct(private string $uploadPath)
+    public function __construct(private readonly string $uploadPath)
     {
     }
 

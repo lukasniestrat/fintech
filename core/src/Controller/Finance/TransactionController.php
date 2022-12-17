@@ -20,10 +20,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class TransactionController extends AbstractFinController
 {
     public function __construct(
-        private BankAccountService $bankAccountService,
-        private TransactionService $transactionService,
-        private TransactionSerializer $transactionSerializer,
-        private CsvStorageService $csvStorageService,
+        private readonly BankAccountService $bankAccountService,
+        private readonly TransactionService $transactionService,
+        private readonly TransactionSerializer $transactionSerializer,
+        private readonly CsvStorageService $csvStorageService,
     ) {
     }
 

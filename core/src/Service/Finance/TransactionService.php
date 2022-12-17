@@ -17,8 +17,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 class TransactionService
 {
     public function __construct(
-        private CategoryService $categoryService,
-        private TransactionRepository $transactionRepository,
+        private readonly CategoryService $categoryService,
+        private readonly TransactionRepository $transactionRepository,
     ) {
     }
 
@@ -72,9 +72,6 @@ class TransactionService
         $this->transactionRepository->removeTransaction($transaction);
     }
 
-    /**
-     * @return Transaction[]
-     */
     public function findTransactionsBySubject(string $subject): ?array
     {
         return $this->transactionRepository->findTransactionsBySubject($subject);

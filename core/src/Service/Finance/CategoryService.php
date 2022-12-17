@@ -11,7 +11,7 @@ use App\Repository\Finance\CategoryRepository;
 class CategoryService
 {
     public function __construct(
-        private CategoryRepository $categoryRepository
+        private readonly CategoryRepository $categoryRepository
     ) {
     }
 

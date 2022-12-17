@@ -9,7 +9,7 @@ use App\Repository\Finance\BankAccountRepository;
 class BankAccountService
 {
     public function __construct(
-        private BankAccountRepository $bankAccountRepository
+        private readonly BankAccountRepository $bankAccountRepository
     ) {
     }
 

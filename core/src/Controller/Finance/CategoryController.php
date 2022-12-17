@@ -14,8 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class CategoryController extends AbstractFinController
 {
     public function __construct(
-        private CategoryService $categoryService,
-        private CategorySerializer $categorySerializer,
+        private readonly CategoryService $categoryService,
+        private readonly CategorySerializer $categorySerializer,
     ) {
     }
 
