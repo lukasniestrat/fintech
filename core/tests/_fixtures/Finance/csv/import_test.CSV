@@ -1,0 +1,4 @@
+Auftragskonto;Buchungstag;Valutadatum;Buchungstext;Verwendungszweck;Glaeubiger ID;Mandatsreferenz;Kundenreferenz (End-to-End);Sammlerreferenz;Lastschrift Ursprungsbetrag;Auslagenersatz Ruecklastschrift;Beguenstigter/Zahlungspflichtiger;Kontonummer/IBAN;BIC (SWIFT-Code);Betrag;Waehrung;Info
+DE75285500000150656502;14.10.21;15.10.21;FOLGELASTSCHRIFT;Testverwendung;;;;;;;Hans Meyer;DE86280200501429904400;OLBODEH2XXX;-38,94;EUR;Umsatz vorgemerkt
+DE75285500000150656502;14.10.21;14.10.21;GUTSCHR. UEBERWEISUNG;EWE Stromg;;;;;;;EWE GmbH & Co.KG;DE80700543060011801230;BYLADEM1WOR;112,5;EUR;Umsatz gebucht
+DE75285500000150656502;15.10.21;15.10.21;FOLGELASTSCHRIFT;Netflix;;;;;;;Netflix Inc.;DE80700543060011801230;BYLADEM1WOR;14,99;EUR;Umsatz gebucht
