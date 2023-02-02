@@ -1,1 +1,0 @@
-{"version":1,"defects":{"App\\Tests\\Integration\\Finance\\TransactionRepositoryTest::test_it_gets_all_transactions":4},"times":{"App\\Tests\\Integration\\Finance\\TransactionRepositoryTest::test_it_gets_all_transactions":0.022}}

@@ -15,7 +15,7 @@ services:
     environment:
       - 'DATABASE_URL=mysql://${MYSQL_USER}:${MYSQL_PASS}@db_server:3306/${MYSQL_DB}?serverVersion=10.5'
     volumes:
-      - ./core:/var/www/html
+      - ./components/core:/var/www/html
       - ./docker/server/apache/sites-enabled:/etc/apache2/sites-enabled
       - ./docker/server/php/php.ini:/usr/local/etc/php/conf.d/extra-php-config.ini
     networks:
