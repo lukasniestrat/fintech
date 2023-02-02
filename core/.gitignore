@@ -18,6 +18,7 @@
 ###> custom ###
 /upload
 /public/csv/*
+/tmp
 ###< custom ###
 
 ###> php-cs-fixer ###

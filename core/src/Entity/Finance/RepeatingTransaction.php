@@ -6,53 +6,35 @@ use App\Repository\Finance\RepeatingTransactionRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=RepeatingTransactionRepository::class)
- */
+#[ORM\Entity(repositoryClass: RepeatingTransactionRepository::class)]
 class RepeatingTransaction
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private float $amount;
 
-    /**
-     * @ORM\Column(type="date")
-     */
+    #[ORM\Column(type: 'date')]
     private DateTimeInterface $lastBookingDate;
 
-    /**
-     * @ORM\Column(type="date")
-     */
+    #[ORM\Column(type: 'date')]
     private DateTimeInterface $nextBookingDate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=BookingIdentifier::class, inversedBy="repeatingTransactions")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: BookingIdentifier::class, inversedBy: 'repeatingTransactions')]
+    #[ORM\JoinColumn(nullable: false)]
     private BookingIdentifier $booking;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="repeatingTransactions")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'repeatingTransactions')]
+    #[ORM\JoinColumn(nullable: false)]
     private Category $category;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $subject;
 
     public function getId(): ?int

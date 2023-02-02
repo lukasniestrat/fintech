@@ -7,26 +7,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=BookingIdentifierRepository::class)
- */
+#[ORM\Entity(repositoryClass: BookingIdentifierRepository::class)]
 class BookingIdentifier
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RepeatingTransaction::class, mappedBy="booking")
-     */
+    #[ORM\OneToMany(mappedBy: 'booking', targetEntity: RepeatingTransaction::class)]
     private Collection $repeatingTransactions;
 
     public function __construct()

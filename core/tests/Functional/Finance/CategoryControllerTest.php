@@ -65,6 +65,32 @@ class CategoryControllerTest extends AbstractFinApiTest
         self::assertEquals($expectedData, $data);
     }
 
+    public function test_it_dont_update_immutable_categories(): void
+    {
+        $updateData = [
+            'name' => 'Test',
+            'tags' => [
+                'test',
+                'test',
+                'test',
+            ],
+        ];
+
+        $expectedData = [
+            'success' => false,
+            'code' => 'CategoryException-3',
+            'detail' => 'Category is immutable',
+        ];
+
+        $response = $this->request(self::HTTP_PUT, '/categories/1', $updateData);
+
+        self::assertEquals(403, $response->getStatusCode());
+        self::assertJson($response->getContent());
+
+        $data = $this->getData($response->getContent());
+        self::assertEquals($expectedData, $data);
+    }
+
     public function test_it_gets_categories(): void
     {
         $response = $this->request(self::HTTP_GET, '/categories');

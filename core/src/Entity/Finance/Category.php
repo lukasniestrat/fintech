@@ -8,41 +8,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=CategoryRepository::class)
- */
+#[ORM\Entity(repositoryClass: CategoryRepository::class)]
 class Category implements Serializable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="string", length=510, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 510, nullable: true)]
     private ?string $tags;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=BankAccount::class, inversedBy="categories")
-     */
+    #[ORM\ManyToMany(targetEntity: BankAccount::class, mappedBy: 'categories')]
     private Collection $bankAccount;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RepeatingTransaction::class, mappedBy="category")
-     */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: RepeatingTransaction::class)]
     private Collection $repeatingTransactions;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="category")
-     */
+    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Transaction::class)]
     private Collection $transactions;
 
     public function __construct(string $name, string $tags)

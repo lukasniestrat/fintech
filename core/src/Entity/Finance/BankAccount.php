@@ -7,41 +7,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=BankAccountRepository::class)
- */
+ #[ORM\Entity(repositoryClass: BankAccountRepository::class)]
 class BankAccount
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="string", length=22)
-     */
+    #[ORM\Column(type: 'string', length: 22)]
     private string $iban;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private bool $isSavingAccount;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=Category::class, mappedBy="bankAccount")
-     */
+    #[ORM\ManyToMany(targetEntity: Category::class, mappedBy: 'bankAccount')]
     private Collection $categories;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Transaction::class, mappedBy="bankAccount")
-     */
+    #[ORM\OneToMany(mappedBy: 'bankAccount', targetEntity: Transaction::class)]
     private Collection $transactions;
 
     public function __construct()

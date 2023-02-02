@@ -39,6 +39,23 @@ class TransactionControllerTest extends AbstractFinApiTest
         array_map('unlink', glob(__DIR__ . '/../../../public/uploads/*'));
     }
 
+    public function test_it_dont_upload_if_csv_file_is_missing(): void
+    {
+        $expectedData = [
+            'success' => false,
+            'code' => 'UploadFileException-2',
+            'detail' => 'No file set',
+        ];
+
+        $response = $this->request(self::HTTP_POST, '/transactions/uploadcsv', [], [], []);
+
+        self::assertEquals(400, $response->getStatusCode());
+        self::assertJson($response->getContent());
+
+        $data = $this->getData($response->getContent());
+        self::assertEquals($expectedData, $data);
+    }
+
     public function test_it_imports_transactions(): void
     {
         $csvFilePath = __DIR__ . '/../../_fixtures/Finance/csv/import_test.CSV';

@@ -5,27 +5,19 @@ namespace App\Entity\Finance;
 use App\Repository\Finance\BankAccountAmountRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=BankAccountAmountRepository::class)
- */
+#[ORM\Entity(repositoryClass: BankAccountAmountRepository::class)]
 class BankAccountAmount
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private float $amount;
 
-    /**
-     * @ORM\OneToOne(targetEntity=BankAccount::class, cascade={"persist", "remove"})
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\OneToMany(targetEntity: BankAccount::class, cascade: ['persists', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
     private BankAccount $bankAccount;
 
     public function getId(): ?int

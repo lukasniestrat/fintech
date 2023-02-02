@@ -8,54 +8,36 @@ use App\Repository\Finance\TransactionRepository;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=TransactionRepository::class)
- */
+#[ORM\Entity(repositoryClass: TransactionRepository::class)]
 class Transaction implements Serializable
 {
     public const CSV_SEPERATOR = ';';
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2)]
     private float $amount;
 
-    /**
-     * @ORM\Column(type="date")
-     */
+    #[ORM\Column(type: 'date')]
     private DateTimeInterface $bookingDate;
 
-    /**
-     * @ORM\Column(type="string", length=22)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $iban;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=BankAccount::class, inversedBy="transactions")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: BankAccount::class, inversedBy: 'transactions')]
+    #[ORM\JoinColumn(nullable: false)]
     private BankAccount $bankAccount;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private string $subject;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="transactions")
-     */
+    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'transactions')]
     private Category $category;
 
     public function __construct(string $name, string $subject, BankAccount $bankAccount)
