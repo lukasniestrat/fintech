@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace App\Entity\Finance;
 
-use DateTime;
 use App\Model\Common\FinConstants;
 use App\Model\Common\Serializable;
 use App\Repository\Finance\TransactionRepository;

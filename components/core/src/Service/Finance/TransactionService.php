@@ -2,7 +2,6 @@
 declare(strict_types = 1);
 namespace App\Service\Finance;
 
-use DateTime;
 use App\Entity\Finance\BankAccount;
 use App\Entity\Finance\Category;
 use App\Entity\Finance\Transaction;
@@ -13,6 +12,7 @@ use App\Model\Common\FinConstants;
 use App\Model\Common\ModelList;
 use App\Model\Common\RequestMetaData;
 use App\Repository\Finance\TransactionRepository;
+use DateTime;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class TransactionService

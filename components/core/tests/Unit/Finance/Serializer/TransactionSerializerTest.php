@@ -2,15 +2,15 @@
 declare(strict_types = 1);
 namespace Unit\Finance\Serializer;
 
-use App\Service\Finance\BankAccountService;
-use App\Service\Finance\CategoryService;
-use DateTime;
 use App\Model\Common\FinConstants;
 use App\Serializer\Finance\TransactionSerializer;
+use App\Service\Finance\BankAccountService;
+use App\Service\Finance\CategoryService;
 use App\Tests\Factory\Finance\BankAccountFactoryTrait;
 use App\Tests\Factory\Finance\CategoryFactoryTrait;
 use App\Tests\Factory\Finance\TransactionFactoryTrait;
 use App\Tests\Utils\ReflectionFactory;
+use DateTime;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -95,8 +95,7 @@ class TransactionSerializerTest extends TestCase
     private function getSerializer(
         BankAccountService | MockObject $bankAccountService = null,
         CategoryService | MockObject $categoryService = null,
-    ): TransactionSerializer
-    {
+    ): TransactionSerializer {
         return new TransactionSerializer(
             $bankAccountService ?? $this->bankAccountServiceMock,
             $categoryService ?? $this->categoryServiceMock,

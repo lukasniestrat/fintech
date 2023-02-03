@@ -1,10 +1,10 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace App\Factory\Finance;
 
-use DateTime;
 use App\Entity\Finance\BankAccount;
 use App\Entity\Finance\Transaction;
+use DateTime;
 
 class TransactionFactory
 {
@@ -15,8 +15,7 @@ class TransactionFactory
         float $amount,
         DateTime $bookingDate,
         string $iban
-    ): Transaction
-    {
+    ): Transaction {
         $transaction = new Transaction($name, $subject, $bankAccount);
         $transaction
             ->setAmount($amount)
@@ -30,8 +29,7 @@ class TransactionFactory
         string $name,
         string $subject,
         BankAccount $bankAccount,
-    ): Transaction
-    {
+    ): Transaction {
         return new Transaction($name, $subject, $bankAccount);
     }
 }

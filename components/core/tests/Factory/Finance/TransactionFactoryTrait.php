@@ -13,8 +13,7 @@ trait TransactionFactoryTrait
         BankAccount $bankAccount,
         string $name = 'EWE Stromrechnung',
         string $subject = 'EWE GmbH & Co. KG'
-    ): Transaction
-    {
+    ): Transaction {
         $transaction = ReflectionFactory::createInstanceOfClass(Transaction::class);
         ReflectionFactory::setPrivateProperty($transaction, 'name', $name);
         ReflectionFactory::setPrivateProperty($transaction, 'amount', -19.99);

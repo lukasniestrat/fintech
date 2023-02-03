@@ -2,9 +2,9 @@
 declare(strict_types = 1);
 namespace Unit\Finance\Factory;
 
-use DateTime;
 use App\Factory\Finance\TransactionFactory;
 use App\Tests\Factory\Finance\BankAccountFactoryTrait;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 
 class TransactionFactoryTest extends TestCase

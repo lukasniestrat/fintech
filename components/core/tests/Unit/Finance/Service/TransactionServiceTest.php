@@ -123,8 +123,7 @@ class TransactionServiceTest extends TestCase
     private function getService(
         CategoryService | MockObject $categoryService = null,
         TransactionService | MockObject $transactionService = null,
-    ): TransactionService
-    {
+    ): TransactionService {
         return new TransactionService(
             $categoryService ?? $this->categoryService,
             $transactionService ?? $this->transactionRepository,

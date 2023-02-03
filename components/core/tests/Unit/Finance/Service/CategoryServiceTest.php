@@ -66,8 +66,7 @@ class CategoryServiceTest extends TestCase
 
     private function getService(
         CategoryRepository | MockObject $categoryRepository = null,
-    ): CategoryService
-    {
+    ): CategoryService {
         return new CategoryService($categoryRepository ?? $this->categoryRepository);
     }
 }

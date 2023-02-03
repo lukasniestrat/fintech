@@ -4,14 +4,12 @@ namespace App\Tests\Integration\Finance;
 
 use App\Entity\Finance\BankAccount;
 use App\Entity\Finance\Category;
-use App\Entity\Finance\Transaction;
 use App\Exception\Finance\TransactionException;
 use App\Model\Common\RequestMetaData;
 use App\Repository\Finance\TransactionRepository;
 use App\Tests\Factory\Common\AssertExceptionTrait;
 use App\Tests\Factory\Finance\TransactionFactoryTrait;
 use App\Tests\Integration\Common\AbstractFinRepositoryTest;
-use DateTime;
 
 class TransactionRepositoryTest extends AbstractFinRepositoryTest
 {
