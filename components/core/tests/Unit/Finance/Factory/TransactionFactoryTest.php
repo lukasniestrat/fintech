@@ -40,7 +40,6 @@ class TransactionFactoryTest extends TestCase
     public function test_it_creates_immutable_transaction(): void
     {
         $bankAccount = $this->getBankAccountMock();
-        $bookingDate = new DateTime();
         $transaction = TransactionFactory::createImmutableTransaction(
             'PayPal Inc.',
             'Test',

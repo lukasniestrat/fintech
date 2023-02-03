@@ -2,15 +2,16 @@
 declare(strict_types = 1);
 namespace Unit\Finance\Serializer;
 
+use App\Service\Finance\BankAccountService;
+use App\Service\Finance\CategoryService;
 use DateTime;
 use App\Model\Common\FinConstants;
 use App\Serializer\Finance\TransactionSerializer;
 use App\Tests\Factory\Finance\BankAccountFactoryTrait;
 use App\Tests\Factory\Finance\CategoryFactoryTrait;
 use App\Tests\Factory\Finance\TransactionFactoryTrait;
-use App\Tests\Mocks\Finance\Services\BankAccountServiceMock;
-use App\Tests\Mocks\Finance\Services\CategoryServiceMock;
 use App\Tests\Utils\ReflectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TransactionSerializerTest extends TestCase
@@ -21,13 +22,15 @@ class TransactionSerializerTest extends TestCase
 
     private ?TransactionSerializer $serializer = null;
 
+    private BankAccountService | MockObject $bankAccountServiceMock;
+
+    private CategoryService | MockObject $categoryServiceMock;
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->serializer = new TransactionSerializer(
-            new BankAccountServiceMock(),
-            new CategoryServiceMock(),
-        );
+        $this->bankAccountServiceMock = $this->getMockBuilder(BankAccountService::class)->disableOriginalConstructor()->getMock();
+        $this->categoryServiceMock = $this->getMockBuilder(CategoryService::class)->disableOriginalConstructor()->getMock();
     }
 
     public function test_it_deserializes(): void
@@ -46,7 +49,7 @@ class TransactionSerializerTest extends TestCase
             ]
         ];
 
-        $transaction = $this->serializer->deserialize($transactionData);
+        $transaction = $this->getSerializer()->deserialize($transactionData);
 
         self::assertNull($transaction->getId());
         self::assertEquals('EWE Stromrechnung', $transaction->getName());
@@ -61,7 +64,7 @@ class TransactionSerializerTest extends TestCase
         ReflectionFactory::setPrivateProperty($transaction, 'category', $category);
         ReflectionFactory::setPrivateProperty($transaction, 'bookingDate', $now);
 
-        $data = $this->serializer->serialize($transaction);
+        $data = $this->getSerializer()->serialize($transaction);
 
         $expected = [
             'id' => null,
@@ -87,5 +90,16 @@ class TransactionSerializerTest extends TestCase
         ];
 
         self::assertEquals($expected, $data);
+    }
+
+    private function getSerializer(
+        BankAccountService | MockObject $bankAccountService = null,
+        CategoryService | MockObject $categoryService = null,
+    ): TransactionSerializer
+    {
+        return new TransactionSerializer(
+            $bankAccountService ?? $this->bankAccountServiceMock,
+            $categoryService ?? $this->categoryServiceMock,
+        );
     }
 }

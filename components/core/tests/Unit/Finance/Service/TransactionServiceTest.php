@@ -4,13 +4,14 @@ namespace App\tests\Unit\Finance\Service;
 
 use App\Entity\Finance\Category;
 use App\Model\Common\RequestMetaData;
+use App\Repository\Finance\TransactionRepository;
+use App\Service\Finance\CategoryService;
 use App\Service\Finance\TransactionService;
 use App\Tests\Factory\Finance\BankAccountFactoryTrait;
 use App\Tests\Factory\Finance\CategoryFactoryTrait;
 use App\Tests\Factory\Finance\TransactionFactoryTrait;
-use App\Tests\Mocks\Finance\Repositories\TransactionRepositoryMock;
-use App\Tests\Mocks\Finance\Services\CategoryServiceMock;
 use App\Tests\Utils\ReflectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class TransactionServiceTest extends TestCase
@@ -21,13 +22,15 @@ class TransactionServiceTest extends TestCase
 
     private ?TransactionService $service = null;
 
+    private CategoryService | MockObject $categoryService;
+
+    private TransactionRepository | MockObject $transactionRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->service = new TransactionService(
-            new CategoryServiceMock(),
-            new TransactionRepositoryMock(),
-        );
+        $this->categoryService = $this->getMockBuilder(CategoryService::class)->disableOriginalConstructor()->getMock();
+        $this->transactionRepository = $this->getMockBuilder(TransactionRepository::class)->disableOriginalConstructor()->getMock();
     }
 
     public function test_it_stores_transaction(): void
@@ -35,9 +38,9 @@ class TransactionServiceTest extends TestCase
         $bankAccount = $this->getBankAccountMock();
         $transaction = $this->getTransactionMock($bankAccount);
 
-        $this->service->storeTransaction($transaction);
+        $this->transactionRepository->expects(self::once())->method('storeTransaction')->with($transaction);
 
-        self::assertEquals(1, TransactionRepositoryMock::$countStoreTransaction);
+        $this->getService()->storeTransaction($transaction);
     }
 
     public function test_it_removes_transaction(): void
@@ -45,30 +48,30 @@ class TransactionServiceTest extends TestCase
         $bankAccount = $this->getBankAccountMock();
         $transaction = $this->getTransactionMock($bankAccount);
 
-        $this->service->removeTransaction($transaction);
+        $this->transactionRepository->expects(self::once())->method('removeTransaction')->with($transaction);
 
-        self::assertEquals(1, TransactionRepositoryMock::$countRemoveTransaction);
+        $this->getService()->removeTransaction($transaction);
     }
 
     public function test_it_finds_transaction_by_subject(): void
     {
-        $this->service->findTransactionsBySubject('test');
+        $this->transactionRepository->expects(self::once())->method('findTransactionsBySubject')->with('EWE GmbH & Co. KG');
 
-        self::assertEquals(1, TransactionRepositoryMock::$countFindTransactionBySubject);
+        $this->getService()->findTransactionsBySubject('EWE GmbH & Co. KG');
     }
 
     public function test_it_gets_transaction_by_id(): void
     {
-        $this->service->getTransactionById(1);
+        $this->transactionRepository->expects(self::once())->method('getTransactionById')->with(1);
 
-        self::assertEquals(1, TransactionRepositoryMock::$countGetTransactionById);
+        $this->getService()->getTransactionById(1);
     }
 
     public function test_it_gets_transactions(): void
     {
-        $this->service->getTransactions(new RequestMetaData());
+        $this->transactionRepository->expects(self::once())->method('getTransactions')->with(new RequestMetaData());
 
-        self::assertEquals(1, TransactionRepositoryMock::$countGetTransactions);
+        $this->getService()->getTransactions(new RequestMetaData());
     }
 
     public function test_it_merges_transactions(): void
@@ -87,7 +90,7 @@ class TransactionServiceTest extends TestCase
         ReflectionFactory::setPrivateProperty($transaction, 'category', $this->getCategoryMock('Unterhaltung'));
         ReflectionFactory::setPrivateProperty($updatedTransaction, 'category', $this->getCategoryMock('Einkäufe'));
 
-        $mergedTransaction = $this->service->mergeTransactions($transaction, $updatedTransaction);
+        $mergedTransaction = $this->getService()->mergeTransactions($transaction, $updatedTransaction);
 
         self::assertEquals($updatedTransaction->getName(), $mergedTransaction->getName());
         self::assertEquals($updatedTransaction->getSubject(), $mergedTransaction->getSubject());
@@ -100,8 +103,10 @@ class TransactionServiceTest extends TestCase
         $bankAccount = $this->getBankAccountMock();
         $transaction = $this->getTransactionMock($bankAccount);
 
-        $category = ReflectionFactory::callPrivateMethod($this->service, 'getCategoryForTransaction', $transaction);
-        self::assertEquals(1, CategoryServiceMock::$countGetCategoriesForTransactionImport);
+        $this->categoryService->expects(self::once())->method('getCategoriesForTransactionImport');
+
+        $category = ReflectionFactory::callPrivateMethod($this->getService(), 'getCategoryForTransaction', $transaction);
+
         self::assertInstanceOf(Category::class, $category);
     }
 
@@ -109,8 +114,20 @@ class TransactionServiceTest extends TestCase
     {
         $bankAccount = $this->getBankAccountMock();
         $transaction = $this->getTransactionMock($bankAccount);
-        ReflectionFactory::callPrivateMethod($this->service, 'checkIfTransactionExists', $transaction);
 
-        self::assertEquals(1, TransactionRepositoryMock::$countFindTransactionBySubject);
+        $this->transactionRepository->expects(self::once())->method('findTransactionsBySubject')->with('EWE GmbH & Co. KG');
+
+        ReflectionFactory::callPrivateMethod($this->getService(), 'checkIfTransactionExists', $transaction);
+    }
+
+    private function getService(
+        CategoryService | MockObject $categoryService = null,
+        TransactionService | MockObject $transactionService = null,
+    ): TransactionService
+    {
+        return new TransactionService(
+            $categoryService ?? $this->categoryService,
+            $transactionService ?? $this->transactionRepository,
+        );
     }
 }
