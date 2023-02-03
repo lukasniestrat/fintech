@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace App\Tests\Unit\Finance;
+namespace App\tests\Unit\Finance\Service;
 
 use App\Entity\Finance\Category;
 use App\Model\Common\RequestMetaData;

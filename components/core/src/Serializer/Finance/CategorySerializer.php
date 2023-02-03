@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace App\Service\Finance\Serializer;
+namespace App\Serializer\Finance;
 
 use App\Entity\Finance\Category;
 use App\Model\Common\Serializable;

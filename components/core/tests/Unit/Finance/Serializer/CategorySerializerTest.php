@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace Unit\Finance\Serializer;
 
-use App\Service\Finance\Serializer\CategorySerializer;
+use App\Serializer\Finance\CategorySerializer;
 use App\Tests\Factory\Finance\CategoryFactoryTrait;
 use PHPUnit\Framework\TestCase;
 

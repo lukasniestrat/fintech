@@ -4,8 +4,8 @@ namespace App\Controller\Finance;
 
 use App\Controller\Common\AbstractFinController;
 use App\Exception\Finance\CategoryException;
+use App\Serializer\Finance\CategorySerializer;
 use App\Service\Finance\CategoryService;
-use App\Service\Finance\Serializer\CategorySerializer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,15 +2,15 @@
 declare(strict_types = 1);
 namespace Unit\Finance\Serializer;
 
+use DateTime;
 use App\Model\Common\FinConstants;
-use App\Service\Finance\Serializer\TransactionSerializer;
+use App\Serializer\Finance\TransactionSerializer;
 use App\Tests\Factory\Finance\BankAccountFactoryTrait;
 use App\Tests\Factory\Finance\CategoryFactoryTrait;
 use App\Tests\Factory\Finance\TransactionFactoryTrait;
 use App\Tests\Mocks\Finance\Services\BankAccountServiceMock;
 use App\Tests\Mocks\Finance\Services\CategoryServiceMock;
 use App\Tests\Utils\ReflectionFactory;
-use DateTime;
 use PHPUnit\Framework\TestCase;
 
 class TransactionSerializerTest extends TestCase

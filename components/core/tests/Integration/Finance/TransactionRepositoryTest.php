@@ -9,12 +9,14 @@ use App\Exception\Finance\TransactionException;
 use App\Model\Common\RequestMetaData;
 use App\Repository\Finance\TransactionRepository;
 use App\Tests\Factory\Common\AssertExceptionTrait;
+use App\Tests\Factory\Finance\TransactionFactoryTrait;
 use App\Tests\Integration\Common\AbstractFinRepositoryTest;
 use DateTime;
 
 class TransactionRepositoryTest extends AbstractFinRepositoryTest
 {
-    use AssertExceptionTrait;
+    use AssertExceptionTrait,
+        TransactionFactoryTrait;
 
     protected function setUp(): void
     {
@@ -26,13 +28,8 @@ class TransactionRepositoryTest extends AbstractFinRepositoryTest
     {
         $bankAccount = $this->getEntityManager()->getReference(BankAccount::class, 1);
         $category = $this->getEntityManager()->getReference(Category::class, 1);
-
-        $transaction = new Transaction('Testname', 'Testsubject', $bankAccount);
-        $transaction
-            ->setIban('DE1234567890')
-            ->setAmount(-12.99)
-            ->setBookingDate(new DateTime())
-            ->setCategory($category);
+        $transaction = $this->getTransactionMock($bankAccount);
+        $transaction->setCategory($category);
 
         $nextInsertId = $this->getCurrentAutoIncForTable('transaction');
         $transaction = $this->getRepository()->storeTransaction($transaction);
