@@ -1,0 +1,32 @@
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    public_directory: '%kernel.project_dir%/public'
+    uploads_directory: '%public_directory%/uploads'
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        bind:
+            $publicPath: '%public_directory%'
+        autowire: true
+        autoconfigure: true
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+            - '../src/Tests/'
+    App\EventListener\Common\JsonExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: [ 'controller.service_arguments' ]
+    App\Service\Finance\CsvStorageService:
+        arguments:
+            $uploadPath: '%uploads_directory%'
